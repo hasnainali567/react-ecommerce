@@ -1,42 +1,49 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setDoc, getDoc, doc, } from "firebase/firestore";
-import { auth, db } from '../../Firebase/Firebase.js'
+import { setDoc, getDoc, doc } from "firebase/firestore";
+import { auth, db } from "../../Firebase/Firebase.js";
 import { updateDoc, arrayUnion } from "firebase/firestore";
-import { u } from "motion/react-client";
-
 
 const initialState = {
   userInfo: null,
-  status: 'idle',
+  status: "idle",
 };
 
-export const getUserDoc = createAsyncThunk("user/getUserDoc", async (userId = auth.currentUser.uid) => {
-  const docRef = doc(db, 'users', userId);
-  const response = await getDoc(docRef);
-  if (response.exists()) {
-    return response.data();
-  } else {
-    throw new Error('No such document!');
+export const getUserDoc = createAsyncThunk(
+  "user/getUserDoc",
+  async (userId = auth.currentUser.uid) => {
+    const docRef = doc(db, "users", userId);
+    const response = await getDoc(docRef);
+    if (response.exists()) {
+      return response.data();
+    } else {
+      throw new Error("No such document!");
+    }
   }
-});
+);
 
-export const addUserDoc = createAsyncThunk("user/addUserDoc", async (userData) => {
-  const docRef = doc(db, 'users', userData.uid);
-  await setDoc(docRef, userData);
-  return userData;
-});
+export const addUserDoc = createAsyncThunk(
+  "user/addUserDoc",
+  async (userData) => {
+    const docRef = doc(db, "users", userData.uid);
+    await setDoc(docRef, userData);
+    return userData;
+  }
+);
 
 export const updateUserCart = createAsyncThunk(
-  'user/updateUserCart',
-  async ({ userId, cartItem }) => {   // dono params as object le lo
-    const docRef = doc(db, 'users', userId);
+  "user/updateUserCart",
+  async ({ userId, cartItem }) => {
+    // dono params as object le lo
+    const docRef = doc(db, "users", userId);
     const userSnap = await getDoc(docRef);
 
     if (userSnap.exists()) {
       const userData = userSnap.data();
       let updatedCart = [...(userData.cart || [])];
 
-      const existingIndex = updatedCart.findIndex(item => item.id === cartItem.id);
+      const existingIndex = updatedCart.findIndex(
+        (item) => item.id === cartItem.id
+      );
 
       if (existingIndex !== -1) {
         updatedCart[existingIndex].quantity += cartItem.quantity;
@@ -48,13 +55,28 @@ export const updateUserCart = createAsyncThunk(
 
       return updatedCart;
     } else {
-      throw new Error('User doc not found');
+      throw new Error("User doc not found");
     }
   }
 );
 
+export const deleteCart = createAsyncThunk(
+  "user/deleteCart",
+  async ({ userId, delItem }) => {
+    const docRef = doc(db, "users", userId);
+    const userSnap = await getDoc(docRef);
 
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      const newCart = userData.cart.filter((item) => item.id !== delItem.id);
 
+      await updateDoc(docRef, { cart: newCart });
+      return newCart;
+    } else {
+      throw new Error ("User doc not found");
+    }
+  }
+);
 
 const UserSlice = createSlice({
   name: "user",
@@ -66,50 +88,57 @@ const UserSlice = createSlice({
     logout: (state) => {
       state.userInfo = null;
     },
-
-
   },
 
   extraReducers: (builder) => {
     builder
       .addCase(getUserDoc.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(getUserDoc.fulfilled, (state, action) => {
         state.userInfo = action.payload;
         state.isLoggedIn = true;
-        state.status = 'succeeded';
+        state.status = "succeeded";
       })
       .addCase(getUserDoc.rejected, (state) => {
         state.userInfo = null;
-        state.status = 'failed';
+        state.status = "failed";
       })
       .addCase(addUserDoc.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(addUserDoc.fulfilled, (state, action) => {
         state.userInfo = action.payload;
         state.isLoggedIn = true;
-        state.status = 'succeeded';
+        state.status = "succeeded";
       })
       .addCase(addUserDoc.rejected, (state) => {
         state.userInfo = null;
-        state.status = 'failed';
+        state.status = "failed";
       })
       .addCase(updateUserCart.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(updateUserCart.fulfilled, (state, action) => {
-
         state.userInfo.cart = action.payload;
 
-        state.status = 'succeeded';
+        state.status = "succeeded";
       })
 
       .addCase(updateUserCart.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(deleteCart.pending, (state)=>{
+        state.status = "loading";
+      } )
+      .addCase(deleteCart.fulfilled, (state, action)=>{
+        state.userInfo.cart = action.payload;
+      })
+      .addCase(deleteCart.rejected, (state)=> {
         state.status = 'failed';
       });
-  }
+      
+  },
 });
 
 export const { setUser, logout } = UserSlice.actions;
