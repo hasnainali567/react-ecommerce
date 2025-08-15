@@ -24,7 +24,7 @@ export const Header = () => {
   
 
   return (
-    <div className='header z-100 bg-white sticky top-0 flex items-center justify-between p-2.5 px-20 bg-dark border-b-2 border-black/5'>
+    <div className='header z-100 bg-white sticky top-0 flex items-center justify-between p-2.5 px-10 md:px-20 lg:px-20 bg-dark border-b-2 border-black/5'>
       <div className='flex items-center gap-7'>
         <Link to={"/"}>
           <div className='flex items-center gap-1 text-dark-primary'>
@@ -32,7 +32,7 @@ export const Header = () => {
             <h1 className='text-md font-medium'>Buylo</h1>
           </div>
         </Link>
-        <div className='flex items-center gap-7 text-sm'>
+        <div className='flex items-center gap-7  text-sm hidden lg:flex'>
           <span
             onClick={() => {
               navigate("/products?q=new-arrivals");
@@ -62,7 +62,7 @@ export const Header = () => {
       <div className='flex items-center gap-4'>
         <label
           htmlFor='search'
-          className='bg-light-secondary flex items-center rounded-md'
+          className='bg-light-secondary items-center rounded-md hidden sm:flex'
         >
           <div className='ps-2.5 text-lg text-black/50'>
             <HiMiniMagnifyingGlass className='text-light-text' />
@@ -70,7 +70,7 @@ export const Header = () => {
           <input
             type='text'
             id='search'
-            className='border-0 outline-none p-2 placeholder:text-light-text w-50'
+            className='border-0 outline-none p-2 placeholder:text-light-text w-30 sm:w-35 md:w-40 lg:w-50'
             placeholder='Search...'
           />
           <button className='bg-light-text text-white p-2 rounded-r-md cursor-pointer'>
