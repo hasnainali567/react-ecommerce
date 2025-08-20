@@ -11,7 +11,7 @@ const BreadCrumb = () => {
   const q = searchParams.get('q');
 
   return (
-    <Breadcrumb style={{ margin: '16px 0' }}>
+    <Breadcrumb style={{margin : '7px 0'}}>
       <Breadcrumb.Item>
         <Link to="/">Home</Link>
       </Breadcrumb.Item>

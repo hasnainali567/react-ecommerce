@@ -1,64 +1,77 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"; // ← yahan react-router-dom hoga
-import { Home, Products, Signup, Login, UserProfile } from "../Pages";
+import { Home, Products, Signup, Login, UserProfile, Product } from "../Pages";
 import { Layout, PrivateRoute, PublicRoute } from "../Components";
 import { AuthProvider } from "../Components"; // Import AuthProvider
+import { useLocation } from "react-router-dom";
+import { AnimatePresence } from 'framer-motion'
 
 function Router() {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-        <Route
-          path='/'
-          element={
-            <Layout>
-              <Home />
-            </Layout>
-          }
-        />
-        <Route
-          path='/products/*'
-          element={
-            <Layout>
-              <Products />
-            </Layout>
-          }
-        />
+  const location = useLocation();
 
-        {/* Public routes - only for non-logged-in users */}
-        <Route
-          path='/signup'
-          element={
-            <PublicRoute>
-              <Layout>
-                <Signup />
+
+  return (
+      <AuthProvider>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path='/'
+              element={
+                <Layout>
+                <Home />
               </Layout>
-            </PublicRoute>
-          }
-        />
-        <Route
-          path='/login'
-          element={
-            <PublicRoute>
+            }
+          />
+          <Route
+            path='/products/:id'
+            element={
               <Layout>
-                <Login />
+                <Product />
               </Layout>
-            </PublicRoute>
-          }
-        />
-        <Route
-          path='/user-profile'
-          element={
-            <PrivateRoute>
+            }
+          />
+          <Route
+            path='/products'
+            element={
               <Layout>
-                <UserProfile />
+                <Products />
               </Layout>
-            </PrivateRoute>
-          }
-        />
-      </Routes>
+            }
+          />
+
+          {/* Public routes - only for non-logged-in users */}
+          <Route
+            path='/signup'
+            element={
+              <PublicRoute>
+                <Layout>
+                  <Signup />
+                </Layout>
+              </PublicRoute>
+            }
+          />
+          <Route
+            path='/login'
+            element={
+              <PublicRoute>
+                <Layout>
+                  <Login />
+                </Layout>
+              </PublicRoute>
+            }
+          />
+          <Route
+            path='/user-profile'
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <UserProfile />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+        </AnimatePresence>
       </AuthProvider>
-    </BrowserRouter>
   );
 }
 

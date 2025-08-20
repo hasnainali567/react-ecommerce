@@ -1,13 +1,13 @@
 import Router from "./Router/Router.jsx";
 import "./App.css";
-import { message } from "antd";
+import { BrowserRouter } from "react-router";
 
 function App() {
-  const [_, contextHolder] = message.useMessage();
   return (
     <>
-      {contextHolder}
+    <BrowserRouter>
       <Router />
+    </BrowserRouter>
     </>
   );
 }

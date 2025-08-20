@@ -7,6 +7,9 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
+  --text-md: 1rem;
+  --breakpoint-xxs: 400px;
+  --breakpoint-xs: 480px;
   --color-dark-primary: #121118;
   --color-dark-secondary: #2A273A;
   --color-light-primary: #FFFFFF;
@@ -18,4 +21,8 @@
 
 *{
   font-family: 'Poppins', sans-serif;
+}
+
+:where(.css-dev-only-do-not-override-l9pxc0).ant-spin .ant-spin-dot-item {
+  background: #797979;
 }

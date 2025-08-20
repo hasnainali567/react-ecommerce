@@ -11,22 +11,22 @@ const UserProfile = () => {
     }
   const user = useSelector((state) => state.user.userInfo)
   return (
-    <div className='px-10 md:px-20 lg:px-30 xl:px-40 py-6 flex flex-col gap-6'>
-        <h2 className='text-3xl font-semibold text-black/70'>My Profile</h2>
-        <div className='flex items-center gap-4 py-4 rounded-md'>
-            <img src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" alt="" className='w-35 h-35 rounded-full'/>
-            <div className='flex flex-col '>
-                <h3 className='text-xl font-semibold text-black/70 capitalize'>{user.username}</h3>
-                <p className='text-light-text'>{user.email}</p>
-                <p className='text-light-text'>Joined on: January 1, 2023</p>
+    <div className=' flex flex-col gap-3 xs:gap-6'>
+        <h2 className='px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-3 sm:py-6 text-2xl xs:text-3xl font-bold xs:font-semibold text-black/70'>My Profile</h2>
+        <div className='px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-3 xxs:py-6 flex flex-col xs:flex-row items-center gap-4 xs:py-4 rounded-md'>
+            <img src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" alt="" className='w-30 h-30 sm:w-35 sm:h-35 rounded-full'/>
+            <div className='flex flex-col items-center xs:items-baseline '>
+                <h3 className='text-3xl xs:text-xl font-semibold text-black/70 capitalize'>{user.username}</h3>
+                <p className='text-light-text text-sm sm:text-md'>{user.email}</p>
+                <p className='text-light-text text-sm sm:text-md'>Joined on: January 1, 2023</p>
             </div>
-            <div className='flex items-center gap-2 ml-auto'>
-                <button onClick={handleLogout} className='bg-light-text text-white px-4 py-2 rounded-md cursor-pointer hover:shadow-md'>Log out</button>
+            <div className='flex items-center gap-2 xs:ml-auto'>
+                <button onClick={handleLogout} className='bg-light-text text-white px-10 xs:px-4 py-2 rounded-md cursor-pointer hover:shadow-md'>Log out</button>
             </div>
         </div>
-        <div id='cart' className=' py-5 min-h-50 rounded-lg'>
-            <h4 className='text-2xl text-light-text font-semibold mb-5'>Shopping Cart </h4>
-            <div className='flex flex-col gap-4 py-4'>
+        <div id='cart' className='px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-3 xxs:py-4  sm:py-3.5 md:py-5 min-h-50 bg-light-secondary'>
+            <h4 className='text-2xl text-light-text font-semibold py-1.5 xxs:py-2'>Shopping Cart </h4>
+            <div className='flex flex-col gap-4 py-3'>
                 {user.cart?.map(item => (
                     <CartItem key={item.id} item={item} />
                 ))}

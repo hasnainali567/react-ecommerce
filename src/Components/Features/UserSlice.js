@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setDoc, getDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../Firebase/Firebase.js";
-import { updateDoc, arrayUnion } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 
 const initialState = {
   userInfo: null,
@@ -30,35 +30,57 @@ export const addUserDoc = createAsyncThunk(
   }
 );
 
+export const updateCartQuantity = createAsyncThunk('user/updateCartQuantity', async ({cartId, quantity}) => {
+  const userId = auth.currentUser.uid;
+  const docRef = doc(db, "users", userId);
+  const userSnap = await getDoc(docRef);
+
+  if (userSnap.exists()) {
+    const userData = userSnap.data();
+    let cart = [...(userData.cart || [])];
+
+    // Find the item to update
+    const itemToUpdate = cart.find((item) => item.id === cartId);
+    if (itemToUpdate) {
+      itemToUpdate.quantity = quantity;
+      await updateDoc(docRef, { cart });
+      return cart;
+    } else {
+      throw new Error("Cart item not found");
+    }
+  } else {
+    throw new Error("User doc not found");
+  }
+});
+
 export const updateUserCart = createAsyncThunk(
   "user/updateUserCart",
   async ({ userId, cartItem }) => {
-    // dono params as object le lo
     const docRef = doc(db, "users", userId);
     const userSnap = await getDoc(docRef);
 
     if (userSnap.exists()) {
       const userData = userSnap.data();
-      let updatedCart = [...(userData.cart || [])];
+      let cart = [...(userData.cart || [])];
 
-      const existingIndex = updatedCart.findIndex(
-        (item) => item.id === cartItem.id
-      );
+      // check if item already exists (by id)
+      const alreadyExists = cart.some((item) => item.id === cartItem.id);
 
-      if (existingIndex !== -1) {
-        updatedCart[existingIndex].quantity += cartItem.quantity;
+      let newCart;
+      if (alreadyExists) {
+        newCart = cart; // same cart return, no change
       } else {
-        updatedCart.push(cartItem);
+        newCart = [...cart, cartItem];
+        await updateDoc(docRef, { cart: newCart });
       }
 
-      await updateDoc(docRef, { cart: updatedCart });
-
-      return updatedCart;
+      return newCart;
     } else {
       throw new Error("User doc not found");
     }
   }
 );
+
 
 export const deleteCart = createAsyncThunk(
   "user/deleteCart",
@@ -73,7 +95,7 @@ export const deleteCart = createAsyncThunk(
       await updateDoc(docRef, { cart: newCart });
       return newCart;
     } else {
-      throw new Error ("User doc not found");
+      throw new Error("User doc not found");
     }
   }
 );
@@ -128,16 +150,16 @@ const UserSlice = createSlice({
       .addCase(updateUserCart.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(deleteCart.pending, (state)=>{
+      .addCase(deleteCart.pending, (state) => {
         state.status = "loading";
-      } )
-      .addCase(deleteCart.fulfilled, (state, action)=>{
+      })
+      .addCase(deleteCart.fulfilled, (state, action) => {
         state.userInfo.cart = action.payload;
       })
-      .addCase(deleteCart.rejected, (state)=> {
+      .addCase(deleteCart.rejected, (state) => {
         state.status = 'failed';
       });
-      
+
   },
 });
 
