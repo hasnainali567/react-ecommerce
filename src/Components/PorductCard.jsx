@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { Timestamp } from "firebase/firestore";
 import { auth } from "../Firebase/Firebase.js";
 import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
 const ProductCard = ({ product }) => {
   const {
     title,
@@ -47,9 +46,12 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <motion.div
-      layoutId={`main-${product.id}`}
-      className='hover:scale-101 hover:translate-3d hover:translate-y-[-5px] hover:shadow-xl shadow rounded-lg duration-100 ease-in cursor-pointer'
+    <div
+    initial={{opacity: 0, y: -20}}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      
+      className={`${!InCart && 'hover:scale-101 hover:translate-3d hover:translate-y-[-5px] hover:shadow-xl'} shadow rounded-lg duration-100 ease-in cursor-pointer`}
     >
       <div
         onClick={() => {
@@ -57,8 +59,8 @@ const ProductCard = ({ product }) => {
         }}
         className='relative w-full rounded-t-lg overflow-hidden'
       >
-        <motion.div
-          layoutId={`sale-label-${product.id}`}
+        <div
+          
           onClick={() => {
             navigate(`/products/${product.id}`);
           }}
@@ -66,46 +68,42 @@ const ProductCard = ({ product }) => {
           disabled
         >
           On Sale
-        </motion.div>
-        <motion.img
-          layoutId={`img-${product.id}`}
+        </div>
+        <img
+          transition={{ type: "spring", stiffness: 120, damping: 20 }}
+          
           src={image || "https://via.placeholder.com/150"}
           alt='product image'
           className='aspect-square object-cover h-full w-full'
         />
       </div>
-      <motion.div
-        layoutId={`content-${product.id}`}
+      <div
         onClick={() => {
           navigate(`/products/${product.id}`);
         }}
         className='p-3'
       >
-        <motion.h3 
-        layoutId={`title-${product.id}`}
-        className='text-lg font-semibold overflow-ellipsis text-nowrap overflow-hidden'>
+        <h3
+          className='text-lg font-semibold overflow-ellipsis text-nowrap overflow-hidden'
+        >
           {title}
-        </motion.h3>
-        <Rate
-          value={rating} allowHalf style={{ fontSize: "15px" }} disabled />
-        <motion.p 
-        layoutId={`description-${product.id}`}
-        className='text-gray-600 text-sm overflow-ellipsis text-nowrap overflow-hidden'>
+        </h3>
+        <Rate value={rating} allowHalf style={{ fontSize: "15px" }} disabled />
+        <p
+          className='text-gray-600 text-sm overflow-ellipsis text-nowrap overflow-hidden'
+        >
           {description}
-        </motion.p>
-        <p 
-        className={`text-md  mt-1 `}>
+        </p>
+        <p className={`text-md  mt-1 `}>
           <span className={`${onSale ? "line-through text-light-text" : ""}`}>
             ${price}
           </span>
           {onSale && <span className='ml-2'>${discountedPrice}</span>}
         </p>
-        <p 
-        className='text-sm text-gray-500 mt-1'>
+        <p className='text-sm text-gray-500 mt-1'>
           {stock ? `${stock} in Stock` : `Out of Stock`}
         </p>
-        <div
-          className='flex justify-between items-center gap-5 mt-2'>
+        <div className='flex justify-between items-center gap-5 mt-2'>
           <p
             onClick={() => {
               navigate(`/products/${product.id}`);
@@ -114,8 +112,7 @@ const ProductCard = ({ product }) => {
           >
             Quantity(Peices)
           </p>
-          <div
-            className='flex flex-1 max-w-50 items-center justify-between border text-light-text border-black/10 rounded bg-light-secondary'>
+          <div className='flex flex-1 max-w-50 items-center justify-between border text-light-text border-black/10 rounded bg-light-secondary'>
             <button
               onClick={() => qty > 1 && setQty(qty - 1)}
               className='px-2.5 cursor-pointer'
@@ -137,19 +134,19 @@ const ProductCard = ({ product }) => {
             </button>
           </div>
         </div>
-        <motion.button
-          layoutId={`add-to-cart-${product.id}`}
+        <button
           onClick={(e) => {
-            e.stopPropagation()
-            !InCart && handleAdd()}}
+            e.stopPropagation();
+            !InCart && handleAdd();
+          }}
           disabled={loading || InCart || stock === 0}
           className='mt-4 w-full bg-light-secondary text-light-text py-2 rounded-lg cursor-pointer active:bg-light-text active:text-white hover:bg-light-text hover:text-light-secondary  ease-in disabled:opacity-50 transition-all duration-200 disabled:bg-light-secondary disabled:text-light-text disabled:cursor-not-allowed'
         >
           <IoMdCart className='inline-block mr-2' />
           {loading ? "Adding..." : InCart ? "In Cart" : "Add to Cart"}
-        </motion.button>
-      </motion.div>
-    </motion.div>
+        </button>
+      </div>
+    </div>
   );
 };
 

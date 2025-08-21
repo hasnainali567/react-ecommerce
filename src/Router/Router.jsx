@@ -11,7 +11,7 @@ function Router() {
 
   return (
       <AuthProvider>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode='popLayout'>
           <Routes location={location} key={location.pathname}>
             <Route
               path='/'
