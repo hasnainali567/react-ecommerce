@@ -34,10 +34,10 @@ const Signup = () => {
           uid: userCredential.user.uid,
           email: userCredential.user.email,
           username: data.username,
+          joined: new Date().toISOString(),
           cart: [],
         })
       ).unwrap();
-      navigate("/");
     } catch (err) {
       console.error(err.message);
     }

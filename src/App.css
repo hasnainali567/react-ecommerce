@@ -1,3 +1,4 @@
+
 @import 'tailwindcss';
 
 
@@ -10,12 +11,24 @@
   --text-md: 1rem;
   --breakpoint-xxs: 400px;
   --breakpoint-xs: 480px;
-  --color-dark-primary: #121118;
+  --color-dark-text: #9E99B9;
   --color-dark-secondary: #2A273A;
-  --color-light-primary: #FFFFFF;
+  --color-light-primary: #121118;
   --color-light-btn: #4755D1;
-  --color-light-secondary: #F1F1F4;
-  --color-light-text: #767990;
+  --color-light-secondary: #1D1B27;
+  --color-light-text: #ffff;
+}
+
+
+.ant-breadcrumb-link > a {
+  color: white !important;
+}
+.ant-breadcrumb-link  {
+  color: white !important;
+}
+
+.ant-breadcrumb-separator {
+  color: white !important;
 }
 
 

@@ -22,7 +22,6 @@ const Login = () => {
     try {
       console.log("Form Data:", data);
       await signInWithEmailAndPassword(auth, data.email, data.password);
-      navigate("/");
     } catch (err) {
       console.error(err.message);
     }

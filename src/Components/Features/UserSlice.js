@@ -146,8 +146,11 @@ const UserSlice = createSlice({
 
         state.status = "succeeded";
       })
-
-      .addCase(updateUserCart.rejected, (state) => {
+      .addCase(updateCartQuantity.fulfilled, (state, action) => {
+        state.userInfo.cart = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(updateCartQuantity.rejected, (state) => {
         state.status = "failed";
       })
       .addCase(deleteCart.pending, (state) => {

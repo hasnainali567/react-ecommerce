@@ -1,8 +1,10 @@
 import React from "react";
 import BannerImage from "../assets/banner.jpg";
 import Button from "./Button.jsx";
+import { useNavigate } from "react-router";
 
 const HeroBanner = () => {
+  const navigate = useNavigate();
   return (
     <div className='hero-banner h-[50vh] lg:h-[60vh] bg-hero-pattern bg-cover bg-center rounded-2xl overflow-hidden shadow-lg relative'>
       <img
@@ -15,7 +17,7 @@ const HeroBanner = () => {
         <p className='my-2 md:my-4 lg:my-6 !mt-2.5 md:!mt-2 text-[12px] md:text-[14px] lg:text-[16px] xl:text-lg text-white/90 text-center px-10'>
             Buylo brings you unbeatable prices, trendy products, and a seamless shopping experience, making every purchase exciting, rewarding, and worth sharing.
         </p>
-        <Button className={'text-white'} label="Shop Now"  />
+        <Button className={'text-white'} label="Shop Now" onClick={() => {navigate('/products')}}  />
       </div>
     </div>
   );

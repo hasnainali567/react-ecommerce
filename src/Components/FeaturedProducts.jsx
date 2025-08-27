@@ -10,7 +10,7 @@ const FeaturedProducts = () => {
 
   return (
     <div className='w-full mt-6'>
-      <h2 className='text-2xl font-semibold mb-3'>Featured Products</h2>
+      <h2 className='text-2xl font-semibold mb-3 text-light-text'>Featured Products</h2>
       <div className='flex flex-wrap gap-2 gap-y-2'>
         <CategoryBadge cat={"allproducts"} text='All Products' />
         <CategoryBadge cat={"earbuds"} text='Earbuds' />

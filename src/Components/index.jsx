@@ -10,7 +10,9 @@ import PrivateRoute from "./PrivateRoute.jsx";
 import CartItem from "./CartItem.jsx";
 import ProductCard from "./PorductCard.jsx";
 import BreadCrumb from "./BreadCrumb.jsx";
+import CheckOutSummary from "./CheckOutSummary.jsx";
 import LoadingCard from "./LoadingCard.jsx";
+import ProductLoading from "./ProductLoading.jsx";
 
 export {
   Header,
@@ -26,4 +28,6 @@ export {
   ProductCard,
   BreadCrumb,
   LoadingCard,
+  ProductLoading,
+  CheckOutSummary
 };

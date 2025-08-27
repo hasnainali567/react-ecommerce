@@ -33,7 +33,7 @@ const CartItem = ({ item }) => {
   };
 
   return (
-    <div className='flex flex-col xxs:flex-row xxs:items-center justify-between rounded-lg border-2 shadow border-light-secondary p-3 bg-white'>
+    <div className='flex flex-col xxs:flex-row xxs:items-center justify-between rounded-lg  py-3 bg-light-primary cursor-pointer'>
       <img
         src={item.image}
         alt={item.title}
@@ -43,8 +43,8 @@ const CartItem = ({ item }) => {
         <h3 className='text-lg overflow-ellipsis text-nowrap overflow-hidden text-light-text font-semibold'>
           {item.title}
         </h3>
-        <p className='text-sm text-gray-400'>${item.price}</p>
-        <p className='text-sm text-gray-500'>Quantity: {quantity}</p>
+        <p className='text-sm text-gray-500'>{item.onSale && <span className='line-through'>${item.price}</span>} {item.onSale ? <span className='text-dark-text'>${item.discountedPrice}</span> : `$${item.price}`}</p>
+        <p className='text-sm text-dark-text'>Quantity: {quantity}</p>
       </div>
       <div className='flex flex-col gap-2'>
         <div className='flex flex-1 max-w-25 xxs:max-w-28 items-center justify-between border border-black/10 rounded bg-light-secondary'>
@@ -66,7 +66,7 @@ const CartItem = ({ item }) => {
               type='number'
               value={quantity}
               min='1'
-              className='w-8 py-1 text-center text-light-text text-sm lg:ps-2.5 border-x-2 border-black/10 outline-none flex-1 cursor-none'
+              className='w-10 py-1 text-center text-light-text text-sm lg:ps-2.5 border-x-2 border-black/10 outline-none flex-1 cursor-not-allowed'
               readOnly
             />
           )}
@@ -78,9 +78,6 @@ const CartItem = ({ item }) => {
             <FaPlus size={10} />
           </button>
         </div>
-        <button className='w-full xxs:w-fit bg-light-text cursor-pointer text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md'>
-          Checkout
-        </button>
       </div>
     </div>
   );

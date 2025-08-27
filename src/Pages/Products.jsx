@@ -50,7 +50,7 @@ const Products = () => {
 
 
   return (
-    <div className='w-full px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-6 flex flex-col gap-2.5 sm:gap-4 md:gap-6'>
+    <div className='bg-light-primary w-full px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-6 flex flex-col gap-2.5 sm:gap-4 md:gap-6 text-light-text'>
       <BreadCrumb />
       <h1 className='text-3xl font-semibold text-light-text capitalize'>
         {query ? query : searchQuery ? searchQuery : "All Products"}

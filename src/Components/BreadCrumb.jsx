@@ -13,7 +13,7 @@ const BreadCrumb = () => {
   const q = searchParams.get('q');
 
   return (
-    <Breadcrumb style={{ margin: '7px 0' }}>
+    <Breadcrumb style={{ margin: '7px 0', color: 'white' }} >
       <Breadcrumb.Item>
         <Link to="/">Home</Link>
       </Breadcrumb.Item>
@@ -33,7 +33,7 @@ const BreadCrumb = () => {
         if (product && isLast) {
           return (
             <React.Fragment key={routeTo}>
-              <Breadcrumb.Item>
+              <Breadcrumb.Item className='text-white'>
                 <Link to={`/products?q=${product.category}`}>
                   {product.category}
                 </Link>
