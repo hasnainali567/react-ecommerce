@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"; // ← yahan react-router-dom hoga
-import { Home, Products, Signup, Login, UserProfile, Product } from "../Pages";
+import { Home, Products, Signup, Login, UserProfile, Product, Dashboard } from "../Pages";
 import { Layout, PrivateRoute, PublicRoute } from "../Components";
 import { AuthProvider } from "../Components"; // Import AuthProvider
 import { useLocation } from "react-router-dom";
@@ -69,6 +69,16 @@ function Router() {
               </PrivateRoute>
             }
           />
+          <Route 
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </PrivateRoute>
+          }
+           />
         </Routes>
         </AnimatePresence>
       </AuthProvider>

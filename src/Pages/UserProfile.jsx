@@ -13,6 +13,7 @@ const UserProfile = () => {
     window.location.reload();
   };
   const user = useSelector((state) => state.user.userInfo);
+  console.log("user from userProfile", user);
   return (
     <div className=' flex flex-col gap-3 bg-light-primary'>
       <div className='flex items-center py-3 px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 gap-1.5'>
@@ -22,7 +23,7 @@ const UserProfile = () => {
             </button> */}
         <button
           onClick={() => navigate(-1)}
-          className=' cursor-pointer text-light-text p-2.5 py-1 rounded-sm '
+          className=' cursor-pointer text-light-text p-2.5 py-1 rounded-sm hover:bg-dark-secondary'
         >
           <FaArrowLeft size={14} />
         </button>
@@ -53,7 +54,17 @@ const UserProfile = () => {
           >
             Log out
           </button>
-        </div>
+          {(auth.currentUser.email === 'hasnain5f7@gmail.com' && auth.currentUser.uid === 'iQLAvQYCsHWq0nQWj58Gs47uu6T2' && user.role === 'admin') && (
+            <button
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+              className='bg-dark-secondary text-white px-10 xs:px-4 py-2 rounded-md cursor-pointer hover:shadow-md'
+            >
+              goto Dashboard
+            </button>
+          )}
+          </div>
       </div>
       <div
         id='cart'

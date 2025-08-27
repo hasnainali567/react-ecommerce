@@ -5,9 +5,9 @@ import { BrowserRouter } from "react-router";
 function App() {
   return (
     <>
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </>
   );
 }

@@ -13,6 +13,7 @@ import BreadCrumb from "./BreadCrumb.jsx";
 import CheckOutSummary from "./CheckOutSummary.jsx";
 import LoadingCard from "./LoadingCard.jsx";
 import ProductLoading from "./ProductLoading.jsx";
+import ProfileDivider from "./ProfileDivider.jsx";
 
 export {
   Header,
@@ -29,5 +30,6 @@ export {
   BreadCrumb,
   LoadingCard,
   ProductLoading,
-  CheckOutSummary
+  CheckOutSummary,
+  ProfileDivider
 };

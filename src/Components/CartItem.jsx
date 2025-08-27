@@ -4,7 +4,7 @@ import { deleteCart, updateCartQuantity } from "./Features/UserSlice";
 import { auth } from "../Firebase/Firebase";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { Spin } from "antd";
-import {} from '@ant-design/icons';
+import {} from "@ant-design/icons";
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
 
@@ -33,23 +33,64 @@ const CartItem = ({ item }) => {
   };
 
   return (
-    <div className='flex flex-col xxs:flex-row xxs:items-center justify-between rounded-lg  py-3 bg-light-primary cursor-pointer'>
+    <div className='flex flex-col xxs:flex-row xxs:items-center justify-between rounded-lg  bg-dark-secondary xxs:bg-light-primary cursor-pointer overflow-hidden'>
       <img
         src={item.image}
         alt={item.title}
-        className='xxs:w-18 xxs:h-18 object-cover rounded-md overflow-hidden'
+        className='xxs:w-22 xxs:h-22 object-cover rounded-t-md xxs:rounded-md overflow-hidden aspect-video xxs:aspect-square'
       />
-      <div className='flex-1 flex flex-col xxs:mx-4 overflow-hidden'>
+      <div className='flex-1 flex flex-col xxs:mx-4 p-2 xxs:p-0 overflow-hidden '>
         <h3 className='text-lg overflow-ellipsis text-nowrap overflow-hidden text-light-text font-semibold'>
           {item.title}
         </h3>
-        <p className='text-sm text-gray-500'>{item.onSale && <span className='line-through'>${item.price}</span>} {item.onSale ? <span className='text-dark-text'>${item.discountedPrice}</span> : `$${item.price}`}</p>
-        <p className='text-sm text-dark-text'>Quantity: {quantity}</p>
+        <p className='text-sm text-gray-500'>
+          {item.onSale && <span className='line-through'>${item.price}</span>}{" "}
+          {item.onSale ? (
+            <span className='text-dark-text'>${item.discountedPrice}</span>
+          ) : (
+            `$${item.price}`
+          )}
+        </p>
+        <div className='text-sm text-dark-text flex items-center justify-between mt-1'>
+          Quantity: {quantity}
+          <div className='flex flex-1 xxs:hidden max-w-25 xxs:max-w-28 items-center justify-between '>
+            <button
+              className='p-2.5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 rounded-full bg-light-primary xxs:bg-dark-secondary'
+              onClick={() =>
+                quantity > 1 ? setQuantity(quantity - 1) : handleDel()
+              }
+              disabled={loading}
+            >
+              <FaMinus size={10} style={{ color: "#767990" }} />
+            </button>
+            {loading ? (
+              <div className='py-1 px-2 text-light-text text-sm'>
+                <Spin size='small' className='!text-light-text' />
+              </div>
+            ) : (
+              <input
+                type='number'
+                value={quantity}
+                min='1'
+                className='w-10 py-1  text-center text-light-text text-sm ps-2.5  outline-none flex content-center cursor-not-allowed'
+                readOnly
+                name='quantity'
+              />
+            )}
+            <button
+              className='p-2.5 rounded-full bg-light-primary xxs:bg-dark-secondary cursor-pointer text-light-text disabled:cursor-not-allowed disabled:opacity-50'
+              onClick={() => setQuantity(quantity + 1)}
+              disabled={loading}
+            >
+              <FaPlus size={10} />
+            </button>
+          </div>
+        </div>
       </div>
-      <div className='flex flex-col gap-2'>
-        <div className='flex flex-1 max-w-25 xxs:max-w-28 items-center justify-between border border-black/10 rounded bg-light-secondary'>
+      <div className='hidden xxs:flex xxs:flex-col gap-2 p-2 xxs:mt-0 bg-dark-secondary xxs:bg-light-primary '>
+        <div className='flex flex-1 max-w-25 xxs:max-w-28 items-center justify-between '>
           <button
-            className='px-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50'
+            className='p-2.5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 rounded-full bg-light-primary xxs:bg-dark-secondary'
             onClick={() =>
               quantity > 1 ? setQuantity(quantity - 1) : handleDel()
             }
@@ -58,20 +99,21 @@ const CartItem = ({ item }) => {
             <FaMinus size={10} style={{ color: "#767990" }} />
           </button>
           {loading ? (
-            <div className="py-1 px-2 text-light-text text-sm">
-              <Spin size='small' className="!text-light-text" />
+            <div className='py-1 px-2 text-light-text text-sm'>
+              <Spin size='small' className='!text-light-text' />
             </div>
           ) : (
             <input
               type='number'
               value={quantity}
               min='1'
-              className='w-10 py-1 text-center text-light-text text-sm lg:ps-2.5 border-x-2 border-black/10 outline-none flex-1 cursor-not-allowed'
+              className='w-10 py-1  text-center text-light-text text-sm ps-2.5  outline-none flex content-center cursor-not-allowed'
               readOnly
+              name='quantity'
             />
           )}
           <button
-            className='px-2 py-1 cursor-pointer text-light-text disabled:cursor-not-allowed disabled:opacity-50'
+            className='p-2.5 rounded-full bg-light-primary xxs:bg-dark-secondary cursor-pointer text-light-text disabled:cursor-not-allowed disabled:opacity-50'
             onClick={() => setQuantity(quantity + 1)}
             disabled={loading}
           >
