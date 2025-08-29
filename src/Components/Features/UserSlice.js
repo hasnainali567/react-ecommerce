@@ -21,6 +21,16 @@ export const getUserDoc = createAsyncThunk(
   }
 );
 
+export const getUserOrders = createAsyncThunk('user/getUserOrders', async (userId = auth.currentUser.uid) => {
+  const docRef = doc(db, "orders", userId);
+  const response = await getDoc(docRef);
+  if (response.exists()) {
+    return {orders: response.data().orders || [], paymentInfo: response.data().paymentInfo || {}};
+  } else {
+    throw new Error("No such document!");
+  }
+});
+
 export const addUserDoc = createAsyncThunk(
   "user/addUserDoc",
   async (userData) => {
@@ -55,15 +65,15 @@ export const updateCartQuantity = createAsyncThunk('user/updateCartQuantity', as
 
 export const updateUserCart = createAsyncThunk(
   "user/updateUserCart",
-  async ({ userId, cartItem }) => {
+  async ({ userId, cartItem}) => {
     const docRef = doc(db, "users", userId);
     const userSnap = await getDoc(docRef);
 
     if (userSnap.exists()) {
+
       const userData = userSnap.data();
       let cart = [...(userData.cart || [])];
 
-      // check if item already exists (by id)
       const alreadyExists = cart.some((item) => item.id === cartItem.id);
 
       let newCart;
@@ -81,6 +91,14 @@ export const updateUserCart = createAsyncThunk(
   }
 );
 
+export const clearCart = createAsyncThunk(
+  "user/clearCart",
+  async (userId) => {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, { cart: [] });
+    return [];
+  }
+);
 
 export const deleteCart = createAsyncThunk(
   "user/deleteCart",
@@ -161,6 +179,27 @@ const UserSlice = createSlice({
       })
       .addCase(deleteCart.rejected, (state) => {
         state.status = 'failed';
+      })
+      .addCase(getUserOrders.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getUserOrders.fulfilled, (state, action) => {
+        state.userInfo.orders = action.payload.orders;
+        state.userInfo.paymentInfo = action.payload.paymentInfo;
+        state.status = "succeeded";
+      })
+      .addCase(getUserOrders.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(clearCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.userInfo.cart = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(clearCart.rejected, (state) => {
+        state.status = "failed";
       });
 
   },

@@ -28,8 +28,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-5 py-15">
-      <h1 className="text-3xl text-black/70 font-bold mb-4">
+    <div className="flex flex-col items-center justify-center p-5 py-15 bg-light-primary">
+      <h1 className="text-3xl text-light-text font-bold mb-4">
         Log In to your Account
       </h1>
 
@@ -71,7 +71,7 @@ const Login = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-light-text mt-4 text-white py-2 px-4 rounded cursor-pointer"
+          className="w-full bg-dark-text mt-4 text-dark-secondary py-2 px-4 rounded cursor-pointer active:bg-dark-secondary/80 active:text-dark-text/90 hover:scale-101 transition-all active:scale-99"
         >
           {status === "loading" ? "Logging In..." : "Log In"}
         </button>

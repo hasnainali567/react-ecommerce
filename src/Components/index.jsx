@@ -14,6 +14,9 @@ import CheckOutSummary from "./CheckOutSummary.jsx";
 import LoadingCard from "./LoadingCard.jsx";
 import ProductLoading from "./ProductLoading.jsx";
 import ProfileDivider from "./ProfileDivider.jsx";
+import Cart from "./Cart.jsx";
+import OrderHistory from "./OrderHistory.jsx";
+import PaymentForm from "./PaymentForm.jsx";
 
 export {
   Header,
@@ -31,5 +34,8 @@ export {
   LoadingCard,
   ProductLoading,
   CheckOutSummary,
-  ProfileDivider
+  ProfileDivider,
+  Cart,
+  OrderHistory,
+  PaymentForm
 };

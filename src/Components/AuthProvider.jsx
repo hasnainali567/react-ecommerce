@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./Features/UserSlice.js";
-import { getUserDoc } from "./Features/UserSlice.js";
+import { getUserDoc, getUserOrders } from "./Features/UserSlice.js";
 import { useNavigate } from "react-router-dom";
 import { getProducts } from "./Features/ProductsSlice.js";
 
@@ -25,13 +25,17 @@ export default function AuthProvider({ children }) {
         const docSnap = await dispatch(getUserDoc(currentUser.uid)).unwrap();
 
         if (docSnap) {
+          console.log('dispatch running');
+          
           dispatch(setUser(docSnap));
+          await dispatch(getUserOrders(currentUser.uid));
+
         }
       }
     });
 
     return () => unsubscribe();
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
   return children;
 }

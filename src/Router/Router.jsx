@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"; // ← yahan react-router-dom hoga
 import { Home, Products, Signup, Login, UserProfile, Product, Dashboard } from "../Pages";
-import { Layout, PrivateRoute, PublicRoute } from "../Components";
+import { Layout, PaymentForm, PrivateRoute, PublicRoute } from "../Components";
 import { AuthProvider } from "../Components"; // Import AuthProvider
 import { useLocation } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion'
@@ -65,6 +65,16 @@ function Router() {
               <PrivateRoute>
                 <Layout>
                   <UserProfile />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/user-profile/Checkout'
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <PaymentForm />
                 </Layout>
               </PrivateRoute>
             }

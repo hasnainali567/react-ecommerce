@@ -44,8 +44,8 @@ const Signup = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center p-5 py-15'>
-      <h1 className='text-3xl text-black/70 font-bold mb-4'>
+    <div className='flex flex-col items-center justify-center p-5 py-15 bg-light-primary'>
+      <h1 className='text-3xl text-light-text font-bold mb-4'>
         Create your Account
       </h1>
 
@@ -104,7 +104,7 @@ const Signup = () => {
         {/* Submit Button */}
         <button
           type='submit'
-          className='w-full bg-light-text mt-4 text-white py-2 px-4 rounded cursor-pointer'
+          className='w-full bg-dark-text mt-4 text-dark-secondary font-medium py-2 px-4 rounded cursor-pointer'
         >
           {status === "loading" ? "Signing Up..." : "Sign Up"}
         </button>

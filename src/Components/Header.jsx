@@ -1,29 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { IoMdCart } from "react-icons/io";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router";
-import { Modal, Badge } from "antd";
-import Button from "./Button.jsx";
+import { Badge } from "antd";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [input, setInput] = useState('');
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
 
   const location = useLocation().pathname.slice(1);
   
 
   let [openSearch, setOpenSearch] = useState(false);
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const user = useSelector((state) => state.user.userInfo);
   
@@ -97,7 +89,7 @@ export const Header = () => {
         {user ? <div
           onClick={() =>
             user === null
-              ? setIsModalOpen(true)
+              ? navigate("/login")
               : navigate("/user-profile")
           }
           className='rounded-full w-10 h-10 object-cover bg-light-secondary cursor-pointer hover:scale-102 active:bg-light-secondary/30 active:scale-95 transition-all overflow-hidden'
@@ -108,47 +100,14 @@ export const Header = () => {
             className='w-10 h-10 object-cover'
           />
         </div> : <button onClick={() => {
-          if (location === 'signup') {
-            navigate('/login');
-          } else if (location === 'login') {
+          if (location === 'login') {
             navigate('/signup');
           } else {
-            setIsModalOpen(true);
+            navigate('/login');
           }
-        }} className="text-nowrap bg-light-text text-white capitalize p-2 px-2.5 rounded-md cursor-pointer hover:scale-102 active:bg-light-secondary active:text-light-text active:scale-95 transition-all hover:shadow-md">{location === 'login' ? 'Sign Up' : 'Log In'}</button>}
+        }} className="text-nowrap min-w-20 bg-dark-secondary text-dark-text capitalize p-2 px-2.5 rounded-md cursor-pointer hover:scale-102 active:bg-dark-text active:text-dark-secondary active:scale-95 transition-all hover:shadow-md">{location === 'login' ? 'Sign Up' : 'Log In'}</button>}
 
-        {!user && (
-          <Modal
-            title='User Profile'
-            open={isModalOpen}
-            onOk={handleOk}
-            footer={null}
-            onCancel={handleCancel}
-            style={{ top: "20px" }}
-            className='flex flex-col'
-          >
-            <div className='flex flex-col gap-4 mt-4'>
-              <Button
-                onClick={() => {
-                  navigate("/signup");
-                }}
-                className={
-                  "text-white border-2 border-light-text bg-light-text active:bg-light-secondary active:text-light-text active:border-light-text active:border-2"
-                }
-                label={"Sign UP"}
-              ></Button>
-              <Button
-                onClick={() => {
-                  navigate("/login");
-                }}
-                className={
-                  "border-light-text border-2 bg-light-secondary text-light-text active:text-white active:bg-light-text"
-                }
-                label={"Log IN"}
-              ></Button>
-            </div>
-          </Modal>
-        )}
+        
       </div>
     </div>
   );
