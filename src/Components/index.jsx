@@ -17,6 +17,10 @@ import ProfileDivider from "./ProfileDivider.jsx";
 import Cart from "./Cart.jsx";
 import OrderHistory from "./OrderHistory.jsx";
 import PaymentForm from "./PaymentForm.jsx";
+import AdminProducts from "./AdminProducts.jsx";
+import AdminOrders from "./AdminOrders.jsx";
+import AdminSettings from "./AdminSettings.jsx";
+import AdminOverview from "./AdminOverview.jsx";
 
 export {
   Header,
@@ -37,5 +41,9 @@ export {
   ProfileDivider,
   Cart,
   OrderHistory,
-  PaymentForm
+  PaymentForm,
+  AdminProducts,
+  AdminOrders,
+  AdminOverview,
+  AdminSettings
 };

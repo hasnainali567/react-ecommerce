@@ -8,13 +8,13 @@ const OrderHistory = () => {
   return (
     <div className="flex flex-col gap-3">
       <h2 className="text-xl text-light-text font-semibold py-1.5 xxs:py-2">Order History</h2>
-      <div className='flex overflow-hidden rounded-lg border border-[#3e3a55] bg-[#121118]'>
-        <table className='w-full border-collapse'>
+      <div className='flex overflow-auto rounded-lg border border-[#3e3a55] bg-[#121118]'>
+        <table className='w-full border-collapse overflow-auto'>
           <thead>
             <tr className='bg-[#1d1b27] text-white text-sm font-medium'>
-              <th className='px-4 py-3 text-left w-[400px]'>Order Number</th>
-              <th className='px-4 py-3 text-left w-[400px]'>Date Placed</th>
-              <th className='px-4 py-3 text-left w-[400px]'>Total Amount</th>
+              <th className='px-4 py-3 text-left w-[400px] text-nowrap'>Order Number</th>
+              <th className='px-4 py-3 text-left w-[400px] text-nowrap'>Date Placed</th>
+              <th className='px-4 py-3 text-left w-[400px] text-nowrap'>Total Amount</th>
               <th className='px-4 py-3 text-left w-60'>Status</th>
               <th className='px-4 py-3 text-left w-60'></th>
             </tr>

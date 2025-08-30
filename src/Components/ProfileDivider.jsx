@@ -10,14 +10,14 @@ const ProfileDivider = () => {
     const tabs = ['Shopping Cart', 'Order History', 'Favourites'];
   return (
     <div className='relative  w-full mb-4'>
-        <ul className='relative flex gap-8 text-white border-b-1 border-dark-text px-4'>
+        <ul className='relative flex gap-2 text-white border-b-1 border-dark-text xs:px-4'>
             {tabs.map((tab) => (
                 <motion.li
                     key={tab}
                     initial={false}
                     animate={{ color: tab === active ? "#fff" : "#9E99B9" }}
                     onClick={() => setActive(tab)}
-                    className={`relative cursor-pointer p-4  border-dark-primary`}
+                    className={`relative cursor-pointer  p-2 py-3 xs:p-3 md:p-4 text-sm xs:text-md md:text-lg`}
                 >
                     {tab}
                     {tab === active ? (

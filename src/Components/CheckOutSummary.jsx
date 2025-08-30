@@ -85,30 +85,30 @@ const CheckOutSummary = () => {
           modalOpen ? "block" : "hidden"
         } w-full h-screen fixed top-0 left-0 flex items-center justify-center bg-black/50 backdrop-blur-md px-5 overflow-hidden`}
       >
-        <div onClick={(e) => e.stopPropagation()} class='bg-light-primary layout-content-container flex flex-col max-w-[512px] p-3  rounded-lg flex-1 shadow-md shadow-dark-secondary'>
-          <div  class='flex flex-wrap justify-between gap-3 py-3 px-1'>
-            <p class='text-white tracking-light text-lg font-semibold leading-tight min-w-72'>
+        <div onClick={(e) => e.stopPropagation()} className='bg-light-primary layout-content-container flex flex-col max-w-[512px] p-3  rounded-lg flex-1 shadow-md shadow-dark-secondary'>
+          <div  className='flex flex-wrap justify-between gap-3 py-3 px-1'>
+            <p className='text-white tracking-light text-lg font-semibold leading-tight min-w-72'>
               Saved Address
             </p>
           </div>
-          <div class='flex items-center gap-4 bg-dark-secondary/20 rounded-md px-4 min-h-[72px] py-2 justify-between'>
-            <div class='flex items-center gap-4'>
-              <div class='flex flex-col justify-center'>
-                <p class='text-white text-base font-medium leading-normal line-clamp-1'>
+          <div className='flex items-center gap-4 bg-dark-secondary/20 rounded-md px-4 min-h-[72px] py-2 justify-between'>
+            <div className='flex items-center gap-4'>
+              <div className='flex flex-col justify-center'>
+                <p className='text-white text-base font-medium leading-normal line-clamp-1'>
                   {paymentInfo && paymentInfo.address}
                 </p>
-                <p class='text-[#a09bbb] text-sm font-normal leading-normal line-clamp-2'>
+                <p className='text-[#a09bbb] text-sm font-normal leading-normal line-clamp-2'>
                   {paymentInfo && paymentInfo.city},{" "}
                   {paymentInfo && paymentInfo.postalCode},{" "}
                   {paymentInfo && paymentInfo.country}
                 </p>
               </div>
             </div>
-            <div class='shrink-0'>
+            <div className='shrink-0'>
               <button
                 disabled={loading}
                 onClick={handleOrder}
-                class='disabled:opacity-20 disabled:cursor-not-allowed flex  max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-3 bg-[#2a273a] text-white text-sm font-medium leading-normal w-fit'
+                className='disabled:opacity-20 disabled:cursor-not-allowed flex  max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-3 bg-[#2a273a] text-white text-sm font-medium leading-normal w-fit'
               >
                 <span className='inline-flex gap-2.5 items-center'>
                   {loading ? <Spin size='small' /> : ""}Proceed
@@ -116,7 +116,7 @@ const CheckOutSummary = () => {
               </button>
             </div>
           </div>
-          <div class='flex gap-3 py-3 justify-end'>
+          <div className='flex gap-3 py-3 justify-end'>
             <Button
               onClick={() => setModalOpen(false)}
               className={`w-full xxs:w-auto bg-light-secondary text-light-text hover:shadow-lg active:shadow active:bg-light-secondary`}
@@ -141,7 +141,7 @@ const CheckOutSummary = () => {
 
       <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>Items </p>
-        <p className='text-[12px] text-light-text'>
+        <p className='text-[12px] text-light-text text-nowrap'>
           {"( "}
           {cart.length || 0}
           {" )"}
@@ -150,7 +150,7 @@ const CheckOutSummary = () => {
 
       <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>SubTotal </p>
-        <p className='text-[12px] text-light-text'>
+        <p className='text-[12px] text-light-text text-nowrap'>
           $ {cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
         </p>
       </div>
@@ -162,7 +162,7 @@ const CheckOutSummary = () => {
 
       <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>Taxes </p>
-        <p className='text-[12px] text-light-text'>
+        <p className='text-[12px] text-light-text text-nowrap'>
           ${" "}
           {(
             cart.reduce((acc, item) => acc + item.price * item.quantity, 0) *
@@ -173,7 +173,7 @@ const CheckOutSummary = () => {
 
       <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>Discount </p>
-        <p className='text-[12px] text-light-text'>
+        <p className='text-[12px] text-light-text text-nowrap'>
           - $
           {(
             cart.reduce(
@@ -188,7 +188,7 @@ const CheckOutSummary = () => {
         <p className='py-1 text-lg font-semibold w-35 text-light-text'>
           Total{" "}
         </p>
-        <p className='text-md font-semibold text-light-text'>
+        <p className='text-md font-semibold text-light-text text-nowrap'>
           ${" "}
           {(
             cart.reduce((acc, item) => acc + item.price * item.quantity, 0) *
@@ -205,9 +205,12 @@ const CheckOutSummary = () => {
       <div className='flex flex-col gap-2 xxs:flex-row items-center justify-between py-4'>
         <Button
           onClick={() => {
-            paymentInfo
+            cart.length > 0 ? paymentInfo
               ? setModalOpen(true)
-              : navigate("/user-profile/checkout");
+              : navigate("/user-profile/checkout") : messageApi.open({
+                type: "error",
+                content: "Your cart is empty.",
+              });
           }}
           className={`w-full xxs:w-auto hover:shadow-lg active:shadow text-sm`}
           label={

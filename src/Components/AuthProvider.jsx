@@ -5,12 +5,10 @@ import { auth } from "../Firebase/Firebase.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./Features/UserSlice.js";
 import { getUserDoc, getUserOrders } from "./Features/UserSlice.js";
-import { useNavigate } from "react-router-dom";
 import { getProducts } from "./Features/ProductsSlice.js";
 
 export default function AuthProvider({ children }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const products = useSelector((state) => state.products?.products);
 
   useEffect(() => {

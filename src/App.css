@@ -31,6 +31,27 @@
   color: white !important;
 }
 
+.scroll-bar {
+  ::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+  scrollbar-width: thin;
+  scrollbar-color: #3e3a55 transparent;
+}
+
+.scroll-bar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-bar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+  background-color: #3e3a55;
+  border-radius: 4px;
+}
 
 *{
   font-family: 'Poppins', sans-serif;

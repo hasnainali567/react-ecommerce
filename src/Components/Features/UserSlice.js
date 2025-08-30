@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setDoc, getDoc, doc } from "firebase/firestore";
+import { setDoc, getDoc, doc, getDocs, collection } from "firebase/firestore";
 import { auth, db } from "../../Firebase/Firebase.js";
 import { updateDoc } from "firebase/firestore";
 
@@ -20,6 +20,11 @@ export const getUserDoc = createAsyncThunk(
     }
   }
 );
+
+export const getAllOrders = createAsyncThunk('user/getAllOrders', async () => {
+  const response = await getDocs(collection(db, "orders"));
+  return response?.docs?.map(doc => doc.data()) || [];
+});
 
 export const getUserOrders = createAsyncThunk('user/getUserOrders', async (userId = auth.currentUser.uid) => {
   const docRef = doc(db, "orders", userId);
@@ -200,8 +205,17 @@ const UserSlice = createSlice({
       })
       .addCase(clearCart.rejected, (state) => {
         state.status = "failed";
+      })
+      .addCase(getAllOrders.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.userInfo.allOrders = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(getAllOrders.rejected, (state) => {
+        state.status = "failed";
       });
-
   },
 });
 

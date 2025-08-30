@@ -4,6 +4,7 @@ import { auth, db } from "../Firebase/Firebase";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { clearCart } from "./Features/UserSlice";
+import { getUserOrders } from "./Features/UserSlice";
 
 const PaymentForm = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -103,7 +104,7 @@ const PaymentForm = () => {
     }, { merge: true });
 
     dispatch(clearCart(auth.currentUser.uid));
-
+    dispatch(getUserOrders(auth.currentUser.uid));
     messageApi.destroy()
     messageApi.open({
       type: "success",
