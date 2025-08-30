@@ -53,7 +53,7 @@ const Product = () => {
                 className='w-full h-full object-cover rounded-lg bg-[#F0F4F9] object-blend-lighten'
               />
             </div>
-            <div className='w-1/4 flex sm:flex-col gap-2 sm:gap-4 md:gap-5'>
+            <div className='sm:w-1/4 flex sm:flex-col gap-2 sm:gap-4 md:gap-5'>
               <img
                 src={image}
                 alt=''
@@ -72,63 +72,7 @@ const Product = () => {
             </div>
           </div>
           <div class='layout-content-container flex flex-col max-w-[920px] flex-1'>
-            <div class='flex flex-wrap gap-2 p-4'>
-              <a
-                class='text-[#a09bbb] text-base font-medium leading-normal'
-                href='#'
-              >
-                Electronics
-              </a>
-              <span class='text-[#a09bbb] text-base font-medium leading-normal'>
-                /
-              </span>
-              <a
-                class='text-[#a09bbb] text-base font-medium leading-normal'
-                href='#'
-              >
-                Audio
-              </a>
-              <span class='text-[#a09bbb] text-base font-medium leading-normal'>
-                /
-              </span>
-              <span class='text-white text-base font-medium leading-normal'>
-                Headphones
-              </span>
-            </div>
-            <div class='flex w-full grow bg-[#121118] @container p-4'>
-              <div class='w-full gap-1 overflow-hidden bg-[#121118] @[480px]:gap-2 aspect-[3/2] rounded-lg flex'>
-                <div
-                  class='w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1'
-                  
-                ></div>
-              </div>
-            </div>
-            <div class='grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4'>
-              <div class='flex flex-col gap-3'>
-                <div
-                  class='w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg'
-                  
-                ></div>
-              </div>
-              <div class='flex flex-col gap-3'>
-                <div
-                  class='w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg'
-                  
-                ></div>
-              </div>
-              <div class='flex flex-col gap-3'>
-                <div
-                  class='w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg'
-                  
-                ></div>
-              </div>
-              <div class='flex flex-col gap-3'>
-                <div
-                  class='w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg'
-                  
-                ></div>
-              </div>
-            </div>
+            
             <h2 class='text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5'>
               Customer Reviews
             </h2>
