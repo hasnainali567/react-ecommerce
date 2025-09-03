@@ -8,6 +8,7 @@ import {
   AdminSettings,
   AdminOverview,
 } from "../Components";
+import { set } from "react-hook-form";
 
 const Dashboard = () => {
   const [menu, setMenu] = React.useState(false);
@@ -18,8 +19,13 @@ const Dashboard = () => {
     dispatch(getAllOrders());
   }, [dispatch]);
 
+  const handleMenuToggle = (tab) => {
+    setActiveMenu(tab);
+    setMenu((prev) => !prev);
+  };
+
   return (
-    <div className='relative flex size-full min-h-150 h-180 flex-col bg-[#121118] dark group/design-root overflow-hidden scroll-bar'>
+    <div className='relative flex size-full min-h-210 flex-col bg-[#121118] dark group/design-root overflow-hidden scroll-bar'>
       <div className='layout-container flex h-full grow flex-col'>
         <div className='gap-1 px-3 sm:px-4 lg:px-6 flex flex-1 justify-center py-5'>
           <div className='hidden  md:flex layout-content-container flex-col w-60 lg:w-72 2xl:w-80 flex-shrink-0'>
@@ -158,16 +164,16 @@ const Dashboard = () => {
                       Manage your store
                     </p>
                   </div>
-                  <div onClick={() => setMenu(false)} className='text-white'>
+                  <div onClick={() => setMenu(false)} className='text-white cursor-pointer'>
                     <FaXmark size={24} />
                   </div>
                 </div>
                 <div className='flex flex-col gap-2'>
                   <div
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${
                       activeMenu === "Overview" ? "bg-[#3a374a]" : ""
                     }`}
-                    onClick={() => setActiveMenu("Overview")}
+                    onClick={() => handleMenuToggle("Overview")}
                   >
                     <div
                       className='text-white'
@@ -193,7 +199,7 @@ const Dashboard = () => {
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer  ${
                       activeMenu === "Products" ? "bg-[#3a374a]" : ""
                     }`}
-                    onClick={() => setActiveMenu("Products")}
+                    onClick={() => handleMenuToggle("Products")}
                   >
                     <div
                       className='text-white'
@@ -219,7 +225,7 @@ const Dashboard = () => {
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${
                       activeMenu === "Orders" ? "bg-[#3a374a]" : ""
                     }`}
-                    onClick={() => setActiveMenu("Orders")}
+                    onClick={() => handleMenuToggle("Orders")}
                   >
                     <div
                       className='text-white'
@@ -245,7 +251,7 @@ const Dashboard = () => {
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${
                       activeMenu === "Settings" ? "bg-[#3a374a]" : ""
                     }`}
-                    onClick={() => setActiveMenu("Settings")}
+                    onClick={() => handleMenuToggle("Settings")}
                   >
                     <div
                       className='text-white'

@@ -2,22 +2,30 @@ import React, { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import Button from "./Button";
-import FilterBadge from "./ui/FilterBadge";
-
+import { message } from "antd";
+import { useDispatch } from "react-redux";
+import { updateProduct } from "./Features/ProductsSlice";
 export const EditProduct = ({ product, isOpen, setIsOpen }) => {
-  const { register, handleSubmit, reset } = useForm({
-    defaultValues: {
-      title: product?.title || "",
-      price: product?.price || "",
-      stock: product?.stock || "",
-      discountedPrice: product?.discountedPrice || "",
-      category: product?.category || "", 
-    },
-  });
+  const dispatch = useDispatch();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { register, handleSubmit, reset, setValue, getValues, watch } = useForm(
+    {
+      defaultValues: {
+        title: product?.title || "",
+        price: product?.price || "",
+        stock: product?.stock || "",
+        discountedPrice: product?.discountedPrice || "",
+        category: product?.category || "",
+        images: product?.images || [],
+      },
+    }
+  );
+
+  const images = watch("images");
 
   const [showDiscount, setShowDiscount] = useState(false);
-  
-  const [selectedCategory, setSelectedCategory] = useState('');
+
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -25,19 +33,63 @@ export const EditProduct = ({ product, isOpen, setIsOpen }) => {
         title: product?.title || "",
         price: product?.price || "",
         stock: product?.stock || "",
-        description : product?.description,
+        description: product?.description,
         discountedPrice: product?.discountedPrice || "",
+        images: product?.images || [],
       });
       setShowDiscount(false);
-      console.log(product);
-      
+
       setSelectedCategory(product.category);
     }
   }, [isOpen, product, reset]);
 
+  const onSubmit = async (data) => {
+    if (!data.images || data.images.length < 4) {
+      messageApi.open({
+        type: "error",
+        content: "At least 4 images are required!",
+      });
+      return;
+    }
 
+    if (data.images.length > 4) {
+      messageApi.open({ type: "error", content: "Maximum 4 images allowed!" });
+      return;
+    } // if sale is on, discounted price validation
+    if (showDiscount) {
+      if (!data.discountedPrice) {
+        messageApi.open({
+          type: "error",
+          content: "Discounted price is required!",
+        });
+        return;
+      }
+      if (data.discountedPrice >= data.price) {
+        messageApi.open({
+          type: "error",
+          content: "Discounted price must be less than actual price!",
+        });
+        return;
+      }
+      data.onSale = true;
+    } else {
+      data.onSale = false;
+      data.discountedPrice = 0;
+    }
 
-  const onSubmit = (data) => {
+    messageApi.open({
+      type: 'loading',
+      content: 'Updating product...',
+      duration: 0
+    });
+
+    await dispatch(updateProduct({id: product.id, ...data}));
+    messageApi.destroy();
+    messageApi.open({
+      type: "success",
+      content: "Form Submitted Successfully!",
+    });
+    setIsOpen(false);
     console.log(data);
   };
 
@@ -53,10 +105,9 @@ export const EditProduct = ({ product, isOpen, setIsOpen }) => {
     "smartphone",
     "tablet",
     "components",
-    "camera"
+    "camera",
+    "smart-home",
   ];
-
-  console.log(product?.category);
 
   return (
     <div
@@ -65,7 +116,12 @@ export const EditProduct = ({ product, isOpen, setIsOpen }) => {
         isOpen ? "top-0 scale-100" : "top-full scale-0"
       } transition-all duration-300 left-0 w-full h-full  bg-black/50 backdrop-blur-md flex items-center justify-center p-4`}
     >
-      <div onClick={(e) => e.stopPropagation()} className='bg-dark-secondary p-4 rounded-lg w-full  max-w-150'>
+      {" "}
+      {contextHolder}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className='bg-dark-secondary p-4 rounded-lg w-full  max-w-150'
+      >
         <div className='flex items-center justify-between text-light-text gap-4 mb-4'>
           <h2 className='text-2xl font-semibold'>Edit Product</h2>
           <FaXmark
@@ -84,25 +140,39 @@ export const EditProduct = ({ product, isOpen, setIsOpen }) => {
               type='text'
               {...register("title")}
               placeholder='Product Title'
+              required
             />
             <textarea
+              maxLength={200}
               {...register("description")}
-              className='bg-light-primary text-dark-text mb-4 p-3.5 text-sm md:text-md  rounded-md w-full'
+              className='bg-light-primary resize-none text-dark-text mb-4 p-3.5 text-sm md:text-md  rounded-md w-full'
               name='description'
               id='description'
+              required
             ></textarea>
             <h4 className='text-dark-text text-lg font-semibold pb-2'>
               Categories
             </h4>
             {selectedCategory && (
               <div className='flex gap-2 mb-4 flex-wrap'>
-               <select className="w-full flex items-center justify-between p-3.5 text-sm md:text-md bg-light-primary text-dark-text capitalize rounded-md" name="category" id="category" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                {categories.map((category) => (
-                  <option selected={category === selectedCategory} key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-               </select>
+                <select
+                  required
+                  className='w-full flex items-center justify-between p-3.5 text-sm md:text-md bg-light-primary text-dark-text capitalize rounded-md'
+                  name='category'
+                  id='category'
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  {categories.map((category) => (
+                    <option
+                      selected={category === selectedCategory}
+                      key={category}
+                      value={category}
+                    >
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
             )}
 
@@ -111,14 +181,67 @@ export const EditProduct = ({ product, isOpen, setIsOpen }) => {
               type='number'
               {...register("price")}
               placeholder='Price'
+              required
+              min={1}
             />
             <input
               className='bg-light-primary text-dark-text mb-4 p-3.5 text-sm md:text-md  rounded-md w-full'
               type='number'
               {...register("stock")}
               placeholder='Stock'
+              min={0}
             />
+            <input
+              type='url'
+              placeholder='Enter image URL and press Enter'
+              className='bg-light-primary text-dark-text p-3 rounded-md w-full'
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  const url = e.currentTarget.value.trim();
 
+                  if (url) {
+                    const current = getValues("images") || [];
+                    if (current.length < 4) {
+                      setValue("images", [...current, url]);
+                      e.target.value = "";
+                    } else {
+                      messageApi.destroy();
+                      messageApi.open({
+                        type: "warning",
+                        content: "You can only add Upto 4 Urls",
+                      });
+                    }
+                  }
+                }
+              }}
+            />
+            <div className=' rounded-lg flex flex-wrap gap-2 py-3 pb-4 overflow-hidden'>
+              {images &&
+                images.map((image, index) => (
+                  <div
+                    onClick={() => {
+                      const current = getValues("images") || [];
+                      setValue(
+                        "images",
+                        current.filter((img) => img !== image)
+                      );
+                    }}
+                    key={image + index}
+                    className='relative'
+                  >
+                    <FaXmark
+                      className='absolute top-[-12%] right-[-12%] bg-light-primary cursor-pointer text-dark-text rounded-full p-1 border-dark-secondary border-4'
+                      size={32}
+                    />
+                    <img
+                      src={image}
+                      alt=''
+                      className='rounded-lg h-20 w-20 object-cover aspect-square'
+                    />
+                  </div>
+                ))}
+            </div>
             {/* Switch Button */}
             <label className='mb-4 flex items-center justify-between gap-2 cursor-pointer select-none'>
               <span className='text-dark-text '>Put on Sale?</span>
@@ -141,8 +264,10 @@ export const EditProduct = ({ product, isOpen, setIsOpen }) => {
               <input
                 className='bg-light-primary transition-all duration-200 text-dark-text mb-4 p-3.5 text-sm md:text-md  rounded w-full'
                 type='number'
-                {...register("discountedPrice")}
+                {...register("discountedPrice", { valueAsNumber: true })}
                 placeholder='Discounted Price'
+                required={showDiscount}
+                min={0}
               />
             )}
 

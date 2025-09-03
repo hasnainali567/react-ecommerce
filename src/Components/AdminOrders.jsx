@@ -101,8 +101,8 @@ const AdminOrders = ({ menu, setMenu }) => {
         <FilterBadge Label={"Cancelled"} />
       </div>
       <div className='md:px-4 py-3 @container'>
-        <div className='flex overflow-auto max-h-150  rounded-lg border border-[#3e3a55] bg-[#121118] scroll-bar'>
-          <table className='flex-1 max-h-100'>
+        <div className='flex overflow-auto max-h-140  rounded-lg border border-[#3e3a55] bg-[#121118] scroll-bar'>
+          <table className='flex-1 '>
             <thead className='sticky top-0'>
               <tr className='bg-[#1d1b27]'>
                 <th className='text-nowrap table-ae896546-8418-4ced-b5d7-85535fe87205-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal'>
@@ -122,7 +122,7 @@ const AdminOrders = ({ menu, setMenu }) => {
                 </th>
               </tr>
             </thead>
-            <tbody className='overflow-auto max-h-200'>
+            <tbody className='overflow-auto'>
               {displayOrders && displayOrders.length > 0 ? (
                 displayOrders.map((order) => (
                   <tr
