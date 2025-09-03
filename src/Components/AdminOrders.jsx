@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getAllOrders } from "./Features/UserSlice";
+import FilterBadge from "./ui/FilterBadge";
 
 const AdminOrders = ({ menu, setMenu }) => {
   const allOrders = useSelector((state) => state.user.userInfo.allOrders);
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (!allOrders) {
@@ -24,7 +26,24 @@ const AdminOrders = ({ menu, setMenu }) => {
         costumerName: orderDoc.paymentInfo.fullName,
       }))
     );
-    
+
+  const sortedOrders = flattenedOrders?.sort((a, b) => b.OrderId - a.OrderId);
+  const [displayOrders, setDisplayOrders] = useState(sortedOrders);
+
+  const handleFilter = useCallback(
+    (query) => {
+      if (query !== "All") {
+        const filtered = flattenedOrders.filter(
+          (order) => order.status === query
+        );
+        setDisplayOrders(filtered);
+      } else {
+        setDisplayOrders(sortedOrders);
+      }
+
+    },
+    [flattenedOrders, sortedOrders]
+  );
 
   return (
     <div className='layout-content-container flex flex-col max-w-[960px] flex-1'>
@@ -63,27 +82,23 @@ const AdminOrders = ({ menu, setMenu }) => {
         </label>
       </div>
       <div className='flex gap-3 p-2 px-0 md:px-4 py-3 flex-wrap '>
-        <button className='flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#2a273a] p-4'>
-          <p className='text-white text-sm font-medium leading-normal'>All</p>
-        </button>
-        <button className='flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#2a273a] p-4'>
-          <p className='text-white text-sm font-medium leading-normal'>
-            Pending
-          </p>
-        </button>
-        <button className='flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#2a273a] p-4'>
-          <p className='text-white text-sm font-medium leading-normal'>Paid</p>
-        </button>
-        <button className='flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#2a273a] p-4'>
-          <p className='text-white text-sm font-medium leading-normal '>
-            Shipped
-          </p>
-        </button>
-        <button className='flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#2a273a] p-4'>
-          <p className='text-white text-sm font-medium leading-normal'>
-            Cancelled
-          </p>
-        </button>
+        <FilterBadge
+          onClick={() => {
+            handleFilter("All");
+          }}
+          Label='All'
+        />
+        <FilterBadge
+          onClick={() => handleFilter("Preparing")}
+          Label={"Preparing"}
+        />
+        <FilterBadge
+          onClick={() => handleFilter("Pending")}
+          Label={"Pending"}
+        />
+        <FilterBadge Label={"Paid"} />
+        <FilterBadge Label={"Shipped"} />
+        <FilterBadge Label={"Cancelled"} />
       </div>
       <div className='md:px-4 py-3 @container'>
         <div className='flex overflow-auto max-h-150  rounded-lg border border-[#3e3a55] bg-[#121118] scroll-bar'>
@@ -108,10 +123,12 @@ const AdminOrders = ({ menu, setMenu }) => {
               </tr>
             </thead>
             <tbody className='overflow-auto max-h-200'>
-              {flattenedOrders &&
-                flattenedOrders.length > 0 &&
-                flattenedOrders.map((order) => (
-                  <tr className='border-t border-t-[#3e3a55]'>
+              {displayOrders && displayOrders.length > 0 ? (
+                displayOrders.map((order) => (
+                  <tr
+                    className='border-t border-t-[#3e3a55]'
+                    key={order.OrderId}
+                  >
                     <td className='table-ae896546-8418-4ced-b5d7-85535fe87205-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal'>
                       #{order.OrderId}
                     </td>
@@ -119,7 +136,7 @@ const AdminOrders = ({ menu, setMenu }) => {
                       {order.costumerName}
                     </td>
                     <td className='table-ae896546-8418-4ced-b5d7-85535fe87205-column-360 h-[72px] px-4 py-2 w-[400px] text-[#a09bbb] text-sm font-normal leading-normal'>
-                      ${order.totalAmount}
+                      ${order.totalAmount.toFixed(2)}
                     </td>
                     <td className='table-4c58aa3e-9208-4123-a86a-46a533327e13-column-480 h-[72px] px-4 py-2 text-sm font-normal leading-normal'>
                       <button className='max-w-fit cursor-pointer rounded-lg h-8 px-4 bg-[#2a273a] text-white text-sm font-medium leading-normal w-full'>
@@ -130,7 +147,17 @@ const AdminOrders = ({ menu, setMenu }) => {
                       Update
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className='text-center text-[#a09bbb] h-[72px] text-sm font-normal leading-normal'
+                  >
+                    No orders found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

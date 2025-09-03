@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { getAllOrders } from "../Components/Features/UserSlice";
 import {
@@ -19,7 +19,7 @@ const Dashboard = () => {
   }, [dispatch]);
 
   return (
-    <div className='relative flex size-full min-h-150 flex-col bg-[#121118] dark group/design-root overflow-x-hidden scroll-bar'>
+    <div className='relative flex size-full min-h-150 h-180 flex-col bg-[#121118] dark group/design-root overflow-hidden scroll-bar'>
       <div className='layout-container flex h-full grow flex-col'>
         <div className='gap-1 px-3 sm:px-4 lg:px-6 flex flex-1 justify-center py-5'>
           <div className='hidden  md:flex layout-content-container flex-col w-60 lg:w-72 2xl:w-80 flex-shrink-0'>
@@ -35,13 +35,13 @@ const Dashboard = () => {
                 </div>
                 <div className='flex flex-col gap-2'>
                   <div
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+                    className={`cursor-pointer flex items-center gap-3 px-3 py-2 rounded-lg ${
                       activeMenu === "Overview" ? "bg-[#3a374a]" : ""
                     }`}
                     onClick={() => setActiveMenu("Overview")}
                   >
                     <div
-                      className='text-white'
+                      className='text-white cursor-pointer'
                       data-icon='PresentationChart'
                       data-size='24px'
                       data-weight='fill'
@@ -56,7 +56,7 @@ const Dashboard = () => {
                         <path d='M216,40H136V24a8,8,0,0,0-16,0V40H40A16,16,0,0,0,24,56V176a16,16,0,0,0,16,16H79.36L57.75,219a8,8,0,0,0,12.5,10l29.59-37h56.32l29.59,37a8,8,0,1,0,12.5-10l-21.61-27H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM104,144a8,8,0,0,1-16,0V120a8,8,0,0,1,16,0Zm32,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm32,0a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Z'></path>
                       </svg>
                     </div>
-                    <p className='text-white text-sm font-medium leading-normal'>
+                    <p className=' text-white text-sm font-medium leading-normal'>
                       Overview
                     </p>
                   </div>

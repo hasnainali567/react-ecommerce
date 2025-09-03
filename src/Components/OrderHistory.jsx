@@ -4,6 +4,11 @@ import { useSelector } from "react-redux";
 
 const OrderHistory = () => {
   const orders = useSelector((state) => state.user.userInfo.orders);
+
+  const sortedOrders = orders && orders.slice().sort((a, b) => new Date(b.OrderId) - new Date(a.OrderId));
+
+
+  console.log(sortedOrders);
   
   return (
     <div className="flex flex-col gap-3">
@@ -16,7 +21,7 @@ const OrderHistory = () => {
               <th className='px-4 py-3 text-left w-[400px] text-nowrap'>Date Placed</th>
               <th className='px-4 py-3 text-left w-[400px] text-nowrap'>Total Amount</th>
               <th className='px-4 py-3 text-left w-60'>Status</th>
-              <th className='px-4 py-3 text-left w-60'></th>
+              <th className='px-4 py-3 text-left w-60'>Actions</th>
             </tr>
           </thead>
           <tbody className='text-[#a09bbb] text-sm'>
@@ -27,17 +32,17 @@ const OrderHistory = () => {
                 </td>
               </tr>
             )}
-            {orders && orders.length > 0 && orders.map((order, index) => (
-              <tr className='border-t border-[#3e3a55]' key={order.id}>
+            {sortedOrders && sortedOrders.length > 0 && sortedOrders.map((order, index) => (
+              <tr className='border-t border-[#3e3a55]' key={order.OrderId}>
               <td className='px-4 py-3'>{`#${order && order?.OrderId.toFixed(0)}`}</td>
               <td className='px-4 py-3'>{order.placedAt.split("T")[0]}</td>
-              <td className='px-4 py-3'>${order.totalAmount}</td>
+              <td className='px-4 py-3'>${order.totalAmount.toFixed(2)}</td>
               <td className='px-4 py-3'>
                 <button className='h-8 px-4 rounded-lg bg-[#2a273a] text-white text-sm font-medium'>
                   {order.status }
                 </button>
               </td>
-              <td className='px-4 py-3 font-bold'>View Details</td>
+              <td className='px-4 py-3 font-bold'>Cancel</td>
             </tr>
             ))}
             

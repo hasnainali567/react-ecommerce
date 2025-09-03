@@ -60,7 +60,8 @@ const ProductCard = ({ product }) => {
         }}
         className='relative w-full rounded-t-lg overflow-hidden'
       >
-        <div
+        {onSale && (
+          <div
           
           onClick={() => {
             navigate(`/products/${product.id}`);
@@ -70,6 +71,7 @@ const ProductCard = ({ product }) => {
         >
           On Sale
         </div>
+        )}
         <img
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
           

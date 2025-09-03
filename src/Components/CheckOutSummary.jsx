@@ -6,7 +6,7 @@ import { message, Spin } from "antd";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { auth } from "../Firebase/Firebase";
 import { db } from "../Firebase/Firebase";
-import { getUserOrders } from "./Features/UserSlice";
+import { clearCart, getUserOrders } from "./Features/UserSlice";
 
 
 const CheckOutSummary = () => {
@@ -33,18 +33,17 @@ const CheckOutSummary = () => {
             Items: cart,
             status: "Preparing",
             placedAt: new Date().toISOString(),
-            totalAmount: cart.reduce(
-              (total, item) => total + item.price * item.quantity ,
+            totalAmount: (cart.reduce(
+              (total, item) => total + item.price * item.quantity,
               0
-            ),
+            ) * 1.1) - (cart.reduce((total, item) => total + item.discountedPrice * item.quantity, 0) * 0.1),
           }),
         });
 
         setModalOpen(false);
 
         dispatch(getUserOrders(auth.currentUser.uid));
-
-
+        dispatch(clearCart(auth.currentUser.uid));
 
         messageApi.destroy();
         messageApi.open({
@@ -171,7 +170,7 @@ const CheckOutSummary = () => {
         </p>
       </div>
 
-      <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
+      <div className='flex gap-40 sm:gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>Discount </p>
         <p className='text-[12px] text-light-text text-nowrap'>
           - $
