@@ -17,11 +17,10 @@ const Product = () => {
   const productId = location.pathname.split("/")[2];
   const navigate = useNavigate();
   const { products, productStatus } = useSelector((state) => state.products);
-  const cart  = useSelector((state) => state.user?.userInfo?.cart);
-  const {addToCart} = useUpdateCart()
+  const cart = useSelector((state) => state.user?.userInfo?.cart);
+  const { addToCart } = useUpdateCart();
   const [messageApi, contextHolder] = message.useMessage();
 
-  
   const product = products && products.find((item) => item.id === productId);
   const InCart = cart && cart.some((item) => item.id === product.id);
   const related =
@@ -52,7 +51,7 @@ const Product = () => {
 
     await addToCart({ cartItem, userId });
     setLoading(false);
-    messageApi.destroy()
+    messageApi.destroy();
     messageApi.open({
       type: "success",
       content: "Added to cart successfully!",
@@ -74,7 +73,7 @@ const Product = () => {
     );
   }
 
-  const {title, description, stock, images, category, price, rating } =
+  const { title, description, stock, images, category, price, rating } =
     product && product;
   const image = images && images;
 
@@ -90,26 +89,42 @@ const Product = () => {
                 <img
                   src={image}
                   alt=''
-                  className='w-full h-full object-cover rounded-lg bg-[#F0F4F9] object-blend-lighten'
+                  className='w-full h-full object-cover rounded-lg bg-[#F0F4F9] object-blend-lighten aspect-video'
                 />
               </div>
-              <div className='lg:w-1/4 flex lg:flex-col  gap-2 sm:gap-4 md:gap-5'>
-                <img
-                  src={image}
-                  alt=''
-                  className='w-full shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
-                />
-                <img
-                  src={image}
-                  alt=''
-                  className='w-full shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
-                />
-                <img
-                  src={image}
-                  alt=''
-                  className='w-full shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
-                />
-              </div>
+              {images && images.length > 1 ? (
+                <div className='lg:w-1/4 flex lg:flex-col  gap-2 sm:gap-4 md:gap-5'>
+                  {images.map((img, index) => {
+                    if (index === 0) return null;
+                    return (
+                      <img
+                        key={index}
+                        src={img}
+                        alt=''
+                        className='w-full lg:h-1/3 aspect-video object-cover shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className='lg:w-1/4 flex lg:flex-col  gap-2 sm:gap-4 md:gap-5'>
+                  <img
+                    src={image}
+                    alt=''
+                    className='w-full lg:h-1/3 aspect-video shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
+                  />
+                  <img
+                    src={image}
+                    alt=''
+                    className='w-full lg:h-1/3 aspect-video shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
+                  />
+                  <img
+                    src={image}
+                    alt=''
+                    className='w-full lg:h-1/3 aspect-video shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
+                  /> 
+                </div>
+              )}
             </div>
             <div className='md:w-[30%] flex flex-col gap-2 '>
               <h1 className='text-xl xs:text-2xl font-semibold text-light-text mt-3'>
@@ -734,7 +749,7 @@ const Product = () => {
                 {related &&
                   related.map((item) => (
                     <div
-                    key={item.id}
+                      key={item.id}
                       onClick={() => navigate(`/products/${item.id}`)}
                       className='cursor-pointer flex h-full flex-1 flex-col gap-4 rounded-lg min-w-40 max-w-40 overflow-hidden'
                     >

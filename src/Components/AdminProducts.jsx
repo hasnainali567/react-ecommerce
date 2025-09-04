@@ -2,18 +2,25 @@ import React, { useCallback } from "react";
 import { FaBars } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { EditProduct } from "./EditProduct";
+import { AddProduct } from "./AddProduct";
 
 const AdminProducts = ({ menu, setMenu }) => {
   const products = useSelector((state) => state.products.products);
   const [editingProduct, setEditingProduct] = React.useState(null);
-  const [modalOpen, setModalOPen] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [addModal, setAddModal] = React.useState(false);
   const handleEdit = useCallback(
     (id) => {
       setEditingProduct(products.find((product) => product.id === id));
-      setModalOPen(true);
+      setModalOpen(true);
     },
     [products]
   );
+
+  const handleAdd = useCallback(() => {
+    setEditingProduct(null);
+    setAddModal(true);
+  }, []);
 
   return (
     <div className=' layout-content-container flex flex-col max-w-[960px] flex-1'>
@@ -25,7 +32,7 @@ const AdminProducts = ({ menu, setMenu }) => {
           <p className='text-white text-2xl md:text-3xl font-bold leading-tight '>
             Products
           </p>
-          <button className='flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#2104af] text-white text-sm font-bold leading-normal tracking-[0.015em]'>
+          <button onClick={handleAdd} className='flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#2104af] text-white text-sm font-bold leading-normal tracking-[0.015em]'>
             <span className='truncate'>Add Product</span>
           </button>
         </div>
@@ -86,9 +93,10 @@ const AdminProducts = ({ menu, setMenu }) => {
       <div className='flex px-4 py-3 justify-end'></div>
       <EditProduct
         isOpen={modalOpen}
-        setIsOpen={setModalOPen}
+        setIsOpen={setModalOpen}
         product={editingProduct}
       />
+      <AddProduct isOpen={addModal} setIsOpen={setAddModal} />
     </div>
   );
 };

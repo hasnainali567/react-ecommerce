@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { doc, getDocs, deleteDoc, updateDoc, collection } from "firebase/firestore";
+import { doc, getDocs, deleteDoc, updateDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../../Firebase/Firebase";
 
 const initialState = {
@@ -22,6 +22,11 @@ export const deleteProduct = createAsyncThunk("products/deleteProduct", async (p
     const productRef = doc(db, "products", productId);
     await deleteDoc(productRef);
     return productId;
+});
+
+export const addProduct = createAsyncThunk('products/addProduct', async (product) => {
+    const docRef = await addDoc(collection(db, 'products'), product);
+    return { id: docRef.id, ...product };
 });
 
 const ProductsSlice = createSlice({
@@ -67,6 +72,16 @@ const ProductsSlice = createSlice({
             })
             .addCase(deleteProduct.rejected, (state) => {
                 state.productStatus = "failed";
+            })
+            .addCase(addProduct.pending, (state)=> {
+                state.productStatus = 'loading';
+            })
+            .addCase(addProduct.fulfilled, (state, action)=> {
+                state.products = [...state.products, action.payload];
+                state.productStatus = 'succeeded';
+            })
+            .addCase(addProduct.rejected, (state)=>{
+                state.productStatus = 'failed';
             });
     }
 });

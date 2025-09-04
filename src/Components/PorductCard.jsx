@@ -1,6 +1,6 @@
 import { Rate } from "antd";
 import React, { useState } from "react";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { message } from "antd";
 import { IoMdCart } from "react-icons/io";
 import useUpdateCart from "../hooks/useUpdateCart.jsx";
 import { useNavigate } from "react-router";
@@ -8,6 +8,7 @@ import { Timestamp } from "firebase/firestore";
 import { auth } from "../Firebase/Firebase.js";
 import { useSelector } from "react-redux";
 const ProductCard = ({ product }) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const {
     title,
     description,
@@ -28,6 +29,11 @@ const ProductCard = ({ product }) => {
   if (!product) return null;
 
   const handleAdd = async () => {
+    messageApi.open({
+      type: "loading",
+      content: "Adding to cart...",
+      duration: 0,
+    });
     setLoading(true);
     const cartItem = {
       id: product.id,
@@ -44,16 +50,21 @@ const ProductCard = ({ product }) => {
 
     await addToCart({ cartItem, userId });
     setLoading(false);
+    messageApi.destroy();
+    messageApi.open({ type: "success", content: "Added to cart!" });
   };
 
   return (
     <div
-    initial={{opacity: 0, y: -20}}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      
-      className={`${!InCart && ' hover:scale-101 hover:translate-3d hover:translate-y-[-5px] hover:shadow-xl'} shadow rounded-lg duration-100 ease-in cursor-pointer`}
+      className={`${
+        !InCart &&
+        " hover:scale-101 hover:translate-3d hover:translate-y-[-5px] hover:shadow-xl"
+      } shadow rounded-lg duration-100 ease-in cursor-pointer`}
     >
+      {contextHolder}
       <div
         onClick={() => {
           navigate(`/products/${product.id}`);
@@ -62,19 +73,17 @@ const ProductCard = ({ product }) => {
       >
         {onSale && (
           <div
-          
-          onClick={() => {
-            navigate(`/products/${product.id}`);
-          }}
-          className={`absolute top-2.5 left-2.5 bg-dark-secondary  text-dark-text px-2 py-1 rounded shadow cursor-default`}
-          disabled
-        >
-          On Sale
-        </div>
+            onClick={() => {
+              navigate(`/products/${product.id}`);
+            }}
+            className={`absolute top-2.5 left-2.5 bg-dark-secondary  text-dark-text px-2 py-1 rounded shadow cursor-default`}
+            disabled
+          >
+            On Sale
+          </div>
         )}
         <img
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          
           src={image || "https://via.placeholder.com/150"}
           alt='product image'
           className='aspect-square object-cover h-full w-full'
@@ -86,31 +95,33 @@ const ProductCard = ({ product }) => {
         }}
         className='p-3 bg-dark-secondary rounded-b-lg'
       >
-        <h3
-          className='text-lg font-semibold overflow-ellipsis text-nowrap overflow-hidden text-light-text'
-        >
+        <h3 className='text-lg font-semibold overflow-ellipsis text-nowrap overflow-hidden text-light-text'>
           {title}
         </h3>
         <Rate value={rating} allowHalf style={{ fontSize: "15px" }} disabled />
-        <p
-          className='text-dark-text text-sm overflow-ellipsis text-nowrap overflow-hidden'
-        >
+        <p className='text-dark-text text-sm overflow-ellipsis text-nowrap overflow-hidden'>
           {description}
         </p>
         <p className={`text-md  mt-1 `}>
-          <span className={`${onSale ? "line-through text-dark-text/50" : ""}`}>
+          <span
+            className={`${
+              onSale ? "line-through text-dark-text/50" : "text-dark-text"
+            }`}
+          >
             ${price}
           </span>
-          {onSale && <span className='ml-2 text-light-text'>${discountedPrice}</span>}
+          {onSale && (
+            <span className='ml-2 text-light-text'>${discountedPrice}</span>
+          )}
         </p>
         <p className='text-sm text-dark-text mt-1'>
           {stock ? `${stock} in Stock` : `Out of Stock`}
         </p>
-        
+
         <button
           onClick={(e) => {
             e.stopPropagation();
-            auth.currentUser ? !InCart && handleAdd() : navigate('/login');
+            auth.currentUser ? !InCart && handleAdd() : navigate("/login");
           }}
           disabled={loading || InCart || stock === 0}
           className='mt-4 w-full bg-light-secondary text-dark-text py-2 rounded-lg cursor-pointer active:bg-dark-secondary active:text-dark-text hover:bg-dark-text hover:text-light-secondary  ease-in disabled:opacity-50 transition-all duration-200 disabled:bg-light-secondary disabled:text-light-text disabled:cursor-not-allowed'

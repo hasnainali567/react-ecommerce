@@ -36,6 +36,51 @@ export const getUserOrders = createAsyncThunk('user/getUserOrders', async (userI
   }
 });
 
+export const updateUserOrder = createAsyncThunk('user/updateUserOrder', async ({ userId = auth.currentUser.uid, orderId, updatedData }) => {
+  const docRef = doc(db, "orders", userId);
+  const userSnap = await getDoc(docRef);
+
+  if (userSnap.exists()) {
+    const userData = userSnap.data();
+    const orders = [...(userData.orders || [])];
+    const orderIndex = orders.findIndex((order) => order.OrderId === orderId);
+
+    if (orderIndex !== -1) {
+      orders[orderIndex] = { ...orders[orderIndex], ...updatedData };
+      await updateDoc(docRef, { orders });
+      return orders;
+    } else {
+      throw new Error("Order not found");
+    }
+  } else {
+    throw new Error("User doc not found");
+  }
+});
+
+export const deleteUserOrder = createAsyncThunk('user/deleteUserOrder', async ({userId = auth.currentUser.uid, orderId})=> {
+  const docRef = doc(db, "orders", userId);
+  const userSnap = await getDoc(docRef);
+
+  if (userSnap.exists()) {
+    
+    const userData = userSnap.data()
+    const orders = [...(userData.orders || [])]
+    const orderIndex = orders.findIndex((order)=> order.OrderId === orderId);
+    if (orderIndex !== -1) {
+      
+      const newOrders = orders.filter((order) => order.OrderId !== orderId);
+      await updateDoc(docRef, { orders: newOrders });
+      return newOrders;
+    } else {
+      throw new Error('Order not found')
+    }
+    
+  } else {
+    throw new Error('User doc not found');
+  }
+})
+
+
 export const addUserDoc = createAsyncThunk(
   "user/addUserDoc",
   async (userData) => {
@@ -214,6 +259,26 @@ const UserSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(getAllOrders.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(updateUserOrder.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateUserOrder.fulfilled, (state, action) => {
+        state.userInfo.orders = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(updateUserOrder.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(deleteUserOrder.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteUserOrder.fulfilled, (state, action) => {
+        state.userInfo.orders = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(deleteUserOrder.rejected, (state) => {
         state.status = "failed";
       });
   },

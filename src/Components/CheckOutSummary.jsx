@@ -141,9 +141,8 @@ const CheckOutSummary = () => {
       <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>Items </p>
         <p className='text-[12px] text-light-text text-nowrap'>
-          {"( "}
-          {cart.length || 0}
-          {" )"}
+          
+          {'( ' + (cart.length || 0) + ' )'}
         </p>
       </div>
 
@@ -162,8 +161,7 @@ const CheckOutSummary = () => {
       <div className='flex gap-50 justify-between sm:justify-normal items-center border-t-2 border-light-text/20 py-3.5'>
         <p className='py-1 text-[14px] w-35 text-dark-text'>Taxes </p>
         <p className='text-[12px] text-light-text text-nowrap'>
-          ${" "}
-          {(
+          $ { ' ' + (
             cart.reduce((acc, item) => acc + item.price * item.quantity, 0) *
             0.1
           ).toFixed(2)}
