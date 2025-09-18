@@ -99,9 +99,24 @@ User Profile (Cart, Orders, Favorites)
 
 Admin Dashboard
 
+---
+## Home Page Screen-Shot
+
 ![Home Page](./screenshots/home.png)
+
+---
+
+## Product listing Page Screen-Shot
+
 ![Product Page](./screenshots/product.png)
+
+---
+
+## Product Page Screen-Shot
+
 ![Dashboard](./screenshots/dashboard.png)
+
+---
 
 🔮 Future Improvements
 
