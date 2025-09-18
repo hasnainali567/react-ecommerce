@@ -3,6 +3,7 @@ import * as motion from 'motion/react-client'
 import { AnimatePresence } from 'framer-motion';
 import Cart from './Cart';
 import OrderHistory from './OrderHistory';
+import Favorites from './Favorites';
 
 const ProfileDivider = () => {
 
@@ -53,7 +54,7 @@ const ProfileDivider = () => {
                     )}
                     {active === "Favourites" && (
                         <div className='py-5 min-h-100'>
-                            {active}
+                            <Favorites />
                         </div>
                     )}
                 </motion.div>

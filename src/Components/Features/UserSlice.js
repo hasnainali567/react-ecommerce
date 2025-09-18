@@ -26,11 +26,33 @@ export const getAllOrders = createAsyncThunk('user/getAllOrders', async () => {
   return response?.docs?.map(doc => doc.data()) || [];
 });
 
+export const updateUserOrderStatus = createAsyncThunk('user/updateUserOrderStatus', async ({ userId, orderId, newStatus }) => {
+  
+  
+  const docRef = doc(db, "orders", userId);
+  const userSnap = await getDoc(docRef);
+  if (userSnap.exists()) {
+    const userData = userSnap.data();
+    const orders = [...(userData.orders || [])];
+    const orderIndex = orders.findIndex((order) => order.OrderId === orderId);
+    if (orderIndex !== -1) {
+      
+      orders[orderIndex].status = newStatus;
+      await updateDoc(docRef, { orders });
+      return orders;
+    } else {
+      throw new Error("Order not found");
+    }
+  } else {
+    throw new Error("User doc not found");
+  }
+});
+
 export const getUserOrders = createAsyncThunk('user/getUserOrders', async (userId = auth.currentUser.uid) => {
   const docRef = doc(db, "orders", userId);
   const response = await getDoc(docRef);
   if (response.exists()) {
-    return {orders: response.data().orders || [], paymentInfo: response.data().paymentInfo || {}};
+    return { orders: response.data().orders || [], paymentInfo: response.data().paymentInfo || {} };
   } else {
     throw new Error("No such document!");
   }
@@ -57,28 +79,30 @@ export const updateUserOrder = createAsyncThunk('user/updateUserOrder', async ({
   }
 });
 
-export const deleteUserOrder = createAsyncThunk('user/deleteUserOrder', async ({userId = auth.currentUser.uid, orderId})=> {
+export const deleteUserOrder = createAsyncThunk('user/deleteUserOrder', async ({ userId = auth.currentUser.uid, orderId }) => {
   const docRef = doc(db, "orders", userId);
   const userSnap = await getDoc(docRef);
 
   if (userSnap.exists()) {
-    
+
     const userData = userSnap.data()
     const orders = [...(userData.orders || [])]
-    const orderIndex = orders.findIndex((order)=> order.OrderId === orderId);
+    const orderIndex = orders.findIndex((order) => order.OrderId === orderId);
     if (orderIndex !== -1) {
-      
+
       const newOrders = orders.filter((order) => order.OrderId !== orderId);
       await updateDoc(docRef, { orders: newOrders });
       return newOrders;
     } else {
       throw new Error('Order not found')
     }
-    
+
   } else {
     throw new Error('User doc not found');
   }
 })
+
+
 
 
 export const addUserDoc = createAsyncThunk(
@@ -90,7 +114,38 @@ export const addUserDoc = createAsyncThunk(
   }
 );
 
-export const updateCartQuantity = createAsyncThunk('user/updateCartQuantity', async ({cartId, quantity}) => {
+export const addToFavorites = createAsyncThunk('user/addToFavorites', async ({ userId = auth.currentUser.uid, favoriteItem }) => {
+  const docRef = doc(db, "users", userId);
+  const userSnap = await getDoc(docRef);
+
+  if (userSnap.exists()) {
+    const userData = userSnap.data();
+    let favorites = [...(userData.favorites || [])];
+
+    const alreadyExists = favorites.some((item) => item.id === favoriteItem.id);
+    if (!alreadyExists) {
+      favorites.push(favoriteItem);
+      try {
+        await updateDoc(docRef, { favorites });
+      } catch (error) {
+        throw new Error("Error adding to favorites:", error);
+      }
+    } else {
+      favorites = favorites.filter((item) => item.id !== favoriteItem.id);
+      try {
+        await updateDoc(docRef, { favorites });
+      } catch (error) {
+        throw new Error("Error removing from favorites:", error);
+      }
+    }
+
+    return favorites;
+  } else {
+    throw new Error("User doc not found");
+  }
+});
+
+export const updateCartQuantity = createAsyncThunk('user/updateCartQuantity', async ({ cartId, quantity }) => {
   const userId = auth.currentUser.uid;
   const docRef = doc(db, "users", userId);
   const userSnap = await getDoc(docRef);
@@ -115,7 +170,7 @@ export const updateCartQuantity = createAsyncThunk('user/updateCartQuantity', as
 
 export const updateUserCart = createAsyncThunk(
   "user/updateUserCart",
-  async ({ userId, cartItem}) => {
+  async ({ userId, cartItem }) => {
     const docRef = doc(db, "users", userId);
     const userSnap = await getDoc(docRef);
 
@@ -252,7 +307,7 @@ const UserSlice = createSlice({
         state.status = "failed";
       })
       .addCase(getAllOrders.pending, (state) => {
-        state.status = "loading";
+        state.status = "loading"
       })
       .addCase(getAllOrders.fulfilled, (state, action) => {
         state.userInfo.allOrders = action.payload;
@@ -279,6 +334,26 @@ const UserSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(deleteUserOrder.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(addToFavorites.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addToFavorites.fulfilled, (state, action) => {
+        state.userInfo.favorites = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(addToFavorites.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(updateUserOrderStatus.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateUserOrderStatus.fulfilled, (state, action) => {
+        state.userInfo.orders = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(updateUserOrderStatus.rejected, (state) => {
         state.status = "failed";
       });
   },

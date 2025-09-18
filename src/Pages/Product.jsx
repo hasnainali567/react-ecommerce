@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { ProductLoading } from "../Components";
@@ -10,6 +10,9 @@ import useUpdateCart from "../hooks/useUpdateCart";
 import { IoMdCart } from "react-icons/io";
 import { Rate } from "antd";
 import { message } from "antd";
+import * as motion from "motion/react-client";
+import { AnimatePresence } from "framer-motion";
+import { FaPercent, FaShoppingBag } from "react-icons/fa";
 
 const Product = () => {
   const [loading, setLoading] = React.useState(false);
@@ -28,6 +31,23 @@ const Product = () => {
     products.filter(
       (item) => item.category === product.category && item.id !== productId
     );
+
+  const [openImage, setOpenImage] = React.useState(null);
+  React.useEffect(() => {
+    if (openImage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [openImage]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [productId]);
 
   const handleAdd = async () => {
     setLoading(true);
@@ -73,12 +93,22 @@ const Product = () => {
     );
   }
 
-  const { title, description, stock, images, category, price, rating } =
+  const { title, description, stock, images, category, price, rating, onSale } =
     product && product;
   const image = images && images;
+  const discountedPrice = product.onSale ? product.discountedPrice : product.price;
+
+  const offPercent = product.onSale ? Math.round(((price - discountedPrice) / price) * 100) : 0;
+
 
   return (
-    <div className='px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-4 bg-light-primary'>
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 30, scale: 0.95 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className='px-5 sm:px-10 md:px-15 lg:px-20 xl:px-30 py-4 bg-light-primary duration-200 ease-in '
+    >
       {contextHolder}
       <BreadCrumb />
       {productStatus === "succeeded" && (
@@ -86,45 +116,62 @@ const Product = () => {
           <div className='flex flex-col md:flex-row gap-4  '>
             <div className='flex flex-col lg:flex-row gap-2 sm:gap-4 md:gap-5 md:w-[70%] w-full mt-4 '>
               <div className='lg:w-3/4 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'>
-                <img
-                  src={image}
-                  alt=''
-                  className='w-full h-full object-cover rounded-lg bg-[#F0F4F9] object-blend-lighten aspect-video'
-                />
+                <div className="w-full h-full bg-dark-secondary relative">
+                  <img
+                    loading="lazy"
+                    src={image}
+                    onClick={() => setOpenImage(image)}
+                    alt=''
+                    className='w-full h-full object-cover rounded-lg bg-[#F0F4F9] object-blend-lighten aspect-video'
+                  />
+                  {onSale && (
+                    <span className='absolute top-2 left-2 z-10 flex items-center gap-2 bg-light-primary text-white p-2 rounded-md text-sm font-semilight'>
+                      <FaPercent size={20}  className='text-light-primary p-1 bg-white rounded-sm' />
+                      <span>{offPercent}% Off</span>
+                    </span>
+                  )}
+                </div>
               </div>
-              {images && images.length > 1 ? (
+              {images && images.length > 1 && (
                 <div className='lg:w-1/4 flex lg:flex-col  gap-2 sm:gap-4 md:gap-5'>
                   {images.map((img, index) => {
                     if (index === 0) return null;
                     return (
-                      <img
+                      <motion.img
+                        loading="lazy"
                         key={index}
                         src={img}
+                        layoutId={img}
+                        onClick={() => setOpenImage(img)}
                         alt=''
                         className='w-full lg:h-1/3 aspect-video object-cover shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
                       />
                     );
                   })}
                 </div>
-              ) : (
-                <div className='lg:w-1/4 flex lg:flex-col  gap-2 sm:gap-4 md:gap-5'>
-                  <img
-                    src={image}
-                    alt=''
-                    className='w-full lg:h-1/3 aspect-video shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
-                  />
-                  <img
-                    src={image}
-                    alt=''
-                    className='w-full lg:h-1/3 aspect-video shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
-                  />
-                  <img
-                    src={image}
-                    alt=''
-                    className='w-full lg:h-1/3 aspect-video shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] rounded-lg overflow-hidden bg-[#F0F4F9]'
-                  /> 
-                </div>
               )}
+              <motion.div>
+                <AnimatePresence>
+                  {openImage && (
+                    <motion.div
+                      className='fixed w-full h-screen inset-0 z-50 flex items-center justify-center bg-black/80 '
+                      onClick={() => setOpenImage(null)}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
+                      exit={{ opacity: 0, }}
+                    >
+                      <motion.img
+                        loading="lazy"
+                        src={openImage}
+                        alt=''
+                        className='max-w-[70%] max-h-[70%] object-cover rounded-2xl overflow-hidden aspect-square'
+                        layoutId={openImage}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             </div>
             <div className='md:w-[30%] flex flex-col gap-2 '>
               <h1 className='text-xl xs:text-2xl font-semibold text-light-text mt-3'>
@@ -136,8 +183,16 @@ const Product = () => {
               <p className='text-white/30 capitalize text-sm lg:text-md'>
                 Category: {category}
               </p>
-              <p className='text-white/80 capitalize text-lg font-semibold'>
-                Price: ${price}
+              <p className={`text-[24px] font-medium  mt-1`}>
+                <span
+                  className={`${onSale ? "line-through text-dark-text/50 font-normal" : "text-dark-text"
+                    }`}
+                >
+                  ${price}
+                </span>
+                {onSale && (
+                  <span className='ml-2 text-light-text'>${discountedPrice}</span>
+                )}
               </p>
               <Rate count={5} value={rating} disabled />
               <div className='flex flex-wrap gap-x-8 gap-y-6 p-4  md:p-0 lg:py-4'>
@@ -775,7 +830,7 @@ const Product = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

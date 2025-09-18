@@ -3,6 +3,7 @@ import { FaBars } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { EditProduct } from "./EditProduct";
 import { AddProduct } from "./AddProduct";
+import { useNavigate } from "react-router";
 
 const AdminProducts = ({ menu, setMenu }) => {
   const products = useSelector((state) => state.products.products);
@@ -21,6 +22,8 @@ const AdminProducts = ({ menu, setMenu }) => {
     setEditingProduct(null);
     setAddModal(true);
   }, []);
+
+  const navigate = useNavigate()
 
   return (
     <div className=' layout-content-container flex flex-col max-w-[960px] flex-1'>
@@ -63,7 +66,8 @@ const AdminProducts = ({ menu, setMenu }) => {
               {products.length > 0 &&
                 products.map((product) => (
                   <tr
-                    className='border-t border-t-[#3e3a55]'
+                  onClick={() => navigate('/products/' + product.id)}
+                    className='border-t border-t-[#3e3a55] cursor-pointer'
                     key={product.title}
                   >
                     <td className='table-ae896546-8418-4ced-b5d7-85535fe87205-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal'>
@@ -79,7 +83,7 @@ const AdminProducts = ({ menu, setMenu }) => {
                       {product.stock}
                     </td>
                     <td
-                      onClick={() => handleEdit(product.id)}
+                      onClick={(e) => {e.stopPropagation(); handleEdit(product.id)}}
                       className='cursor-pointer table-ae896546-8418-4ced-b5d7-85535fe87205-column-600 h-[72px] px-4 py-2 w-60 text-[#a09bbb] text-sm font-bold leading-normal tracking-[0.015em]'
                     >
                       Edit
