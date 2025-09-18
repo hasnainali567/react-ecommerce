@@ -1,12 +1,125 @@
-# React + Vite
+# 🛒 E-Commerce App (React + Firebase)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured **E-Commerce application** built with React, Redux, Firebase, and modern web technologies.  
+The app includes a **public storefront**, **user features** (cart, favorites, orders, profile), and an **admin dashboard** for managing products and orders.  
 
-Currently, two official plugins are available:
+## 🌐 Live Demo  
+🔗 [Click here to view the live app](https://ha-store.netlify.app)  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🌍 Public Routes
+- **Header & Footer Layout**: Consistent across all pages  
+- **Home Page**:  
+  - Hero Banner  
+  - Featured Products section  
+  - Newsletter subscription section  
+- **Product Listing Page**  
+- **Product Detail Page**  
+
+---
+
+### 👤 User Features (Private Routes)
+- **Profile Page**  
+  - Tabs with animations:  
+    - 🛒 Cart  
+    - ❤️ Favorites  
+    - 📦 Order History  
+  - Shows user name, email, and joined date  
+- **Cart Tab**  
+  - Table showing cart items, total amount, etc.  
+  - **Proceed to Payment** → Payment Form Page  
+  - Saved address popup with "Proceed" or "Create New Address" option  
+  - Cart auto-clears after successful order  
+- **Order History**  
+  - List of all past orders  
+  - Cancel orders + option to delete cancelled orders  
+- **Favorites**  
+  - Shows all favorited products  
+
+---
+
+### 🛠️ Admin Dashboard (Private Routes)
+- **Overview Page** → Displays total sales, summary metrics  
+- **Products Management**  
+  - Add, Update, Delete products  
+- **Orders Management**  
+  - View all orders  
+  - Update order status with pre-defined options  
+
+---
+
+## 🧑‍💻 Tech Stack
+- **Frontend**: React, Redux, React Router  
+- **Backend & Auth**: Firebase (Authentication, Firestore, Storage)  
+- **Styling**: Tailwind CSS / modern responsive design  
+- **State Management**: Redux Toolkit  
+- **Payment Flow**: Custom form with saved address support  
+
+---
+
+
+---
+
+## 🖥️ Installation & Setup
+
+1. Clone the repo  
+   ```bash
+   git clone https://github.com/your-username/ecommerce-app.git
+   cd ecommerce-app
+2.Install dependencies
+  ```bash
+  npm install
+```
+
+3.Setup Firebase
+
+Create a Firebase project
+
+Enable Authentication, Firestore, Storage
+
+Add your config in Firebase/Firebase.js
+
+```bash
+npm run dev
+```
+📸 Screenshots
+
+Add your app screenshots here:
+
+Home Page
+
+Product Listing
+
+Product Page
+
+User Profile (Cart, Orders, Favorites)
+
+Admin Dashboard
+
+![Home Page](./screenshots/home.png)
+![Product Page](./screenshots/product.png)
+![Dashboard](./screenshots/dashboard.png)
+
+🔮 Future Improvements
+
+- Integration with real payment gateways (Stripe, PayPal, etc.)
+
+- Product search & filtering
+
+- Responsive product grid for better mobile experience
+
+- Email notifications on order updates
+
+👤 Author
+
+- Hasnain Ali
+
+- 📧 hasnain5f7@gmail.com
+
+- 🌐 Portfolio
+
+- 💼 [LinkedIn](https://www.linkedin.com/in/hasnainaliansari/)
+
