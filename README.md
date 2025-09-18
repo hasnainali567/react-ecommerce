@@ -61,58 +61,47 @@ The app includes a **public storefront**, **user features** (cart, favorites, or
 ---
 
 
----
-
 ## 🖥️ Installation & Setup
 
 1. Clone the repo  
    ```bash
    git clone https://github.com/your-username/ecommerce-app.git
    cd ecommerce-app
-2.Install dependencies
+2. Install dependencies
   ```bash
   npm install
 ```
 
-3.Setup Firebase
+3. Setup Firebase
 
-Create a Firebase project
+- Create a Firebase project
 
-Enable Authentication, Firestore, Storage
+- Enable Authentication, Firestore, Storage
 
-Add your config in Firebase/Firebase.js
+- Add your config in Firebase/Firebase.js
 
 ```bash
 npm run dev
 ```
-📸 Screenshots
 
-Add your app screenshots here:
+--- 
 
-Home Page
-
-Product Listing
-
-Product Page
-
-User Profile (Cart, Orders, Favorites)
-
-Admin Dashboard
+## 📸 Screenshots
 
 ---
-## Home Page Screen-Shot
+### Home Page Screen-Shot
 
 ![Home Page](./screenshots/home.png)
 
 ---
 
-## Product listing Page Screen-Shot
+### Product listing Page Screen-Shot
 
 ![Product Page](./screenshots/product.png)
 
 ---
 
-## Product Page Screen-Shot
+### Product Page Screen-Shot
 
 ![Dashboard](./screenshots/dashboard.png)
 
